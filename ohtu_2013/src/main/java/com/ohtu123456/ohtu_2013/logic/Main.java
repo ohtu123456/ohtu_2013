@@ -1,5 +1,6 @@
-package com.ohtu123456.ohtu_2013;
+package com.ohtu123456.ohtu_2013.logic;
 
+import com.ohtu123456.ohtu_2013.UserInterface.UI;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 

@@ -1,5 +1,6 @@
-package com.ohtu123456.ohtu_2013;
+package com.ohtu123456.ohtu_2013.UserInterface;
 
+import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -22,28 +23,41 @@ public class UI {
     private Scanner sc;
     @Autowired
     private LogicInterface logic;
+    private Validator validator;
 
     public UI() {
-        sc = new Scanner(System.in);
+        initialize();
+    }
+
+    private void initialize() {
         referenceTypes = new HashMap<String, Integer>();
         referenceTypes.put("Book", 1);
+        sc = new Scanner(System.in);
+        validator = new Validator();
     }
 
     /*
      * Yksinkertainen valinta-ui. Käyttäjä tekee valinnat kokonaislukusyötteillä.
      */
     public void start() {
-        printMenu();
-        while (true) {
-            int selection = promptInteger(0, 1);
-            switch (selection) {
-                case 0: {
-                    System.exit(0);
-                }
-                case 1: {
-                    addReference();
-                }
+        System.out.println("Valinnat: \n"
+                + "1 - Lisää viite. \n\n"
+                + "0 - Sulje.");
+        int selection = validator.promptInteger(0, 1);
+        switch (selection) {
+            case 0: {
+                System.exit(0);
             }
+            case 1: {
+                addReference();
+            }
+        }
+    }
+
+    public void printReference(String id) {
+        Map<String, String> reference = logic.tulostaClear(id);
+        for (String key : reference.keySet()) {
+            System.out.println(key + ": " + reference.get(key));
         }
     }
 
@@ -56,7 +70,7 @@ public class UI {
             System.out.println(referenceTypes.get(type) + " - " + type);
         }
         System.out.println("\n0 - Palaa valikkoon.");
-        int selection = promptInteger(0, referenceTypes.size());
+        int selection = validator.promptInteger(0, referenceTypes.size());
         if (selection == 0) {
             start();
         } else {
@@ -68,7 +82,7 @@ public class UI {
      * Täytetään yhden viitteen tiedot, näiden tarkistus on nyt sitten toistaiseksi logiikan vastuulla
      */
     private void addReference(int id) {
-        Map<String, Object> newReference = logic.annaKentat(id);
+        Map<String, String> newReference = logic.annaKentat(id);
         String givenValue;
         System.out.println("Täytä seuraavat kentät: ");
         for (Iterator<String> it = newReference.keySet().iterator(); it.hasNext();) {
@@ -84,28 +98,29 @@ public class UI {
         start();
     }
 
-    private void printMenu() {
-        System.out.println("Valinnat: \n"
-                + "1 - Lisää viite. \n\n"
-                + "0 - Sulje.");
-    }
-
     /*
-     * Pyytää käyttäjältä validia kokonaislukua, kunnes se saadaan
+     * Metodit syötteiden tarkistausta varten, tämä luokka lienee turha mikäli syötteet tarkistetaan logiikassa.
+     * 
      */
-    private int promptInteger(int lowerbound, int upperbound) {
-        int selection;
-        while (true) {
-            try {
-                selection = sc.nextInt();
-                if (selection < lowerbound || selection > upperbound) {
-                    throw new InputMismatchException();
+    class Validator {
+
+        /*
+         * Pyytää käyttäjältä validia kokonaislukua, kunnes se saadaan
+         */
+        public int promptInteger(int lowerbound, int upperbound) {
+            int selection;
+            while (true) {
+                try {
+                    selection = sc.nextInt();
+                    if (selection < lowerbound || selection > upperbound) {
+                        throw new InputMismatchException();
+                    }
+                    sc.nextLine();
+                    return selection;
+                } catch (InputMismatchException e) {
+                    System.out.println("Virheellinen syöte");
+                    sc.nextLine();
                 }
-                sc.nextLine();
-                return selection;
-            } catch (InputMismatchException e) {
-                System.out.println("Virheellinen syöte");
-                sc.nextLine();
             }
         }
     }

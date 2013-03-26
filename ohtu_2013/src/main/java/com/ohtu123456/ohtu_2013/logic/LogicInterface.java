@@ -1,4 +1,4 @@
-package com.ohtu123456.ohtu_2013;
+package com.ohtu123456.ohtu_2013.logic;
 
 import java.util.Map;
 
@@ -10,11 +10,11 @@ import java.util.Map;
 
 public interface LogicInterface {
 
-    public boolean lisaaViite(Map<String, Object> viite); //Lisää viitteen ja palauttaa tiedon siitä, onnistuiko lisäys
+    public boolean lisaaViite(Map<String, String> viite); //Lisää viitteen ja palauttaa tiedon siitä, onnistuiko lisäys
 
     public String tulostaBibTex(String id);
 
-    public Map<String, Object> tulostaClear(String id);
+    public Map<String, String> tulostaClear(String id);
 
     /*
      * Logiikka voisi palauttaa id:n perusteella mapin "Avain - tyhjä" -pareja, joihin käyttöliittymä päivittää epätyhjät arvot?
@@ -23,5 +23,5 @@ public interface LogicInterface {
      * feedbackia virheellisestä inputista, koska kaikki tiedot lähetetään logiikalle vasta kun kaikki kentät on täytetty.
      * -Leif
      */
-    public Map<String, Object> annaKentat(int id); 
+    public Map<String, String> annaKentat(int id); 
 }

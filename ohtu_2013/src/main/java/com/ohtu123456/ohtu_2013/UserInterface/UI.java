@@ -41,9 +41,10 @@ public class UI {
      */
     public void start() {
         System.out.println("Valinnat: \n"
-                + "1 - Lisää viite. \n\n"
+                + "1 - Lisää viite. \n"
+                + "2 - Tulosta kaikki.\n\n"
                 + "0 - Sulje.");
-        int selection = validator.promptInteger(0, 1);
+        int selection = validator.promptInteger(0, 2);
         switch (selection) {
             case 0: {
                 System.exit(0);
@@ -51,12 +52,22 @@ public class UI {
             case 1: {
                 addReference();
             }
+            case 2: {
+                printAll();
+            }
         }
     }
 
-    public void printReference(String id) {
-        Map<String, String> reference = logic.tulostaClear(id);
-        for (String key : reference.keySet()) {
+    private void printAll() {
+        ArrayList<Map<String,String>> allReferences = logic.annaKaikkiViitteet();
+        for (Map<String, String> singleReference : allReferences)   {
+            printReference(singleReference);
+            System.out.println("---------------------------------");
+        }
+    }
+    
+    private void printReference(Map<String, String> reference)  {
+        for (String key : reference.keySet())   {
             System.out.println(key + ": " + reference.get(key));
         }
     }

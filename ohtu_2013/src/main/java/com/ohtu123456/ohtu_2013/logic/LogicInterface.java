@@ -1,5 +1,6 @@
 package com.ohtu123456.ohtu_2013.logic;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -16,6 +17,7 @@ public interface LogicInterface {
 
     public Map<String, String> tulostaClear(String id);
 
+    public ArrayList<Map<String,String>> annaKaikkiViitteet();
     /*
      * Logiikka voisi palauttaa id:n perusteella mapin "Avain - tyhjä" -pareja, joihin käyttöliittymä päivittää epätyhjät arvot?
      * Syötteet pitää tarkistaa, joten mietin olisiko paras poistaa annaKentat-metodi ja lisätä tieto tarvittavista kentistä ja valideista 

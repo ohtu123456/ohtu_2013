@@ -1,5 +1,6 @@
 package com.ohtu123456.ohtu_2013.logic;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.springframework.stereotype.Component;
@@ -34,5 +35,19 @@ public class Logic implements LogicInterface {
         fields.put("Year", null);
         fields.put("Publisher", null);
         return fields;
+    }
+
+    public ArrayList<Map<String, String>> annaKaikkiViitteet() {
+        ArrayList<Map<String, String>> kaikkiViitteet = new ArrayList<Map<String, String>>();
+        Map<String, String> viite1 = new LinkedHashMap<String, String>();
+        viite1.put("Title", "kirja1");
+        kaikkiViitteet.add(viite1);
+        Map<String, String> viite2 = new LinkedHashMap<String, String>();
+        viite2.put("Title", "kirja2");
+        kaikkiViitteet.add(viite2);
+        Map<String, String> viite3 = new LinkedHashMap<String, String>();
+        viite3.put("Title", "kirja3");
+        kaikkiViitteet.add(viite3);
+        return kaikkiViitteet;
     }
 }

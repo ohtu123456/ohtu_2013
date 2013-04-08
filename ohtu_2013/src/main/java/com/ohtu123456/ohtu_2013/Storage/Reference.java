@@ -22,4 +22,9 @@ class Reference implements ReferenceInterface {
     public void setField(String field, String value) {
         ref.put(field, value);
     }
+    
+    @Override
+    public Map<String, String> getInMap(){
+        return ref;
+    }
 }

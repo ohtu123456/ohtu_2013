@@ -1,0 +1,25 @@
+package com.ohtu123456.ohtu_2013.UserInterface;
+
+import java.util.Scanner;
+
+/**
+ *
+ * @author Heikki Kalliokoski
+ */
+public class ReaderScanner implements Reader{
+    
+    private Scanner sc;
+    
+    public ReaderScanner(){
+        sc = new Scanner(System.in);
+    }
+
+    public String nextLine() {
+        return sc.nextLine();
+    }
+
+    public int nextInt() {
+        return sc.nextInt();
+    }
+    
+}

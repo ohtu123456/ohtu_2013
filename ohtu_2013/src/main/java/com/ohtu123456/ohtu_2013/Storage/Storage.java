@@ -10,15 +10,15 @@ import java.util.Map;
  */
 class Storage {
 
-    private List<ReferenceInterface> references;
+    private List<Reference> references;
     
     public Storage() {
-        references = new ArrayList<ReferenceInterface>();
+        references = new ArrayList<Reference>();
     }
 
     public ArrayList<Map<String, String>> getReferences() {
         ArrayList<Map<String, String>> referencesInMapFormat = new ArrayList<Map<String, String>>();
-        for(ReferenceInterface ref: references){
+        for(Reference ref: references){
             Map<String, String> refInMap = ref.getInMap();
             referencesInMapFormat.add(refInMap);
         }

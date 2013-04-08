@@ -36,6 +36,13 @@ public class StorateTest extends TestCase {
         assertEquals(1, storage.getReferences().size());
     }
     
-    
+    public void testAddedElementIsInReturnedList(){
+        Map<String, String> ref = new HashMap<String, String>();
+        ref.put("nimi", "ohtu");
+        ref.put("arvo", "23");
+        
+        storage.addReference(ref);
+        assertTrue(storage.getReferences().contains(ref));
+    }
     
 }

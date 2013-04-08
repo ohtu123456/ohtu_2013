@@ -1,5 +1,7 @@
 package com.ohtu123456.ohtu_2013.Storage;
 
+import java.util.HashMap;
+import java.util.Map;
 import junit.framework.TestCase;
 
 /**
@@ -23,5 +25,17 @@ public class StorateTest extends TestCase {
     public void testGetReferencesReturnsEmptyList(){
         assertTrue(storage.getReferences().isEmpty());
     }
+    
+    public void testaddReferenceGrowsAmountOfReferences(){
+        Map<String, String> ref = new HashMap<String, String>();
+        ref.put("nimi", "ohtu");
+        ref.put("arvo", "23");
+        
+        storage.addReference(ref);
+    
+        assertEquals(1, storage.getReferences().size());
+    }
+    
+    
     
 }

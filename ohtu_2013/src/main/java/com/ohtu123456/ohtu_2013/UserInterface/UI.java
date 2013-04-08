@@ -25,6 +25,7 @@ public class UI {
     private LogicInterface logic;
     private Validator validator;
 
+    @Autowired
     public UI(Reader reader, Printer printer) {
         initialize(reader, printer);
     }

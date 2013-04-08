@@ -24,4 +24,8 @@ class Storage {
         }
         return referencesInMapFormat;
     }
+
+    public void addReference(Map<String, String> ref) {
+        references.add(new Reference(ref));
+    }
 }

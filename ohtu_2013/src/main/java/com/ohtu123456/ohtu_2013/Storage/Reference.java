@@ -11,6 +11,10 @@ class Reference implements ReferenceInterface {
         ref = new HashMap<String, String>();
     }
 
+    Reference(Map<String, String> ref) {
+        this.ref = ref;
+    }
+
     @Override
     public String getField(String field) {
         if(!ref.containsKey(field))

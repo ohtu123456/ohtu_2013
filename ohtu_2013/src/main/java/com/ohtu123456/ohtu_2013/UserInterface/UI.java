@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,19 +19,21 @@ public class UI {
 
     private HashMap<String, Integer> referenceTypes;
     private ArrayList<String> fields; //Viitteen vaatimat kentät, kysytään käyttäjältä
-    private Scanner sc;
+    private Reader inputReader;
+    private Printer outputPrinter;
     @Autowired
     private LogicInterface logic;
     private Validator validator;
 
-    public UI() {
-        initialize();
+    public UI(Reader reader, Printer printer) {
+        initialize(reader, printer);
     }
 
-    private void initialize() {
+    private void initialize(Reader reader, Printer printer) {
         referenceTypes = new HashMap<String, Integer>();
         referenceTypes.put("Book", 1);
-        sc = new Scanner(System.in);
+        inputReader = reader;
+        outputPrinter = printer;
         validator = new Validator();
     }
 
@@ -40,7 +41,7 @@ public class UI {
      * Yksinkertainen valinta-ui. Käyttäjä tekee valinnat kokonaislukusyötteillä.
      */
     public void start() {
-        System.out.println("Valinnat: \n"
+        outputPrinter.println("Valinnat: \n"
                 + "1 - Lisää viite. \n"
                 + "2 - Tulosta kaikki.\n\n"
                 + "0 - Sulje.");
@@ -62,13 +63,13 @@ public class UI {
         ArrayList<Map<String,String>> allReferences = logic.annaKaikkiViitteet();
         for (Map<String, String> singleReference : allReferences)   {
             printReference(singleReference);
-            System.out.println("---------------------------------");
+            outputPrinter.println("---------------------------------");
         }
     }
     
     private void printReference(Map<String, String> reference)  {
         for (String key : reference.keySet())   {
-            System.out.println(key + ": " + reference.get(key));
+            outputPrinter.println(key + ": " + reference.get(key));
         }
     }
 
@@ -76,11 +77,11 @@ public class UI {
      * Listataan tunnetut viitetyypit,joista käyttäjä valitsee haluamansa
      */
     private void addReference() {
-        System.out.println("Valitse viitteen tyyppi: \n");
+        outputPrinter.println("Valitse viitteen tyyppi: \n");
         for (String type : referenceTypes.keySet()) {
-            System.out.println(referenceTypes.get(type) + " - " + type);
+            outputPrinter.println(referenceTypes.get(type) + " - " + type);
         }
-        System.out.println("\n0 - Palaa valikkoon.");
+        outputPrinter.println("\n0 - Palaa valikkoon.");
         int selection = validator.promptInteger(0, referenceTypes.size());
         if (selection == 0) {
             start();
@@ -95,15 +96,15 @@ public class UI {
     private void addReference(int id) {
         Map<String, String> newReference = logic.annaKentat(id);
         String givenValue;
-        System.out.println("Täytä seuraavat kentät: ");
+        outputPrinter.println("Täytä seuraavat kentät: ");
         for (Iterator<String> it = newReference.keySet().iterator(); it.hasNext();) {
             String field = it.next();
-            System.out.println(field + ":");
-            givenValue = sc.nextLine();
+            outputPrinter.println(field + ":");
+            givenValue = inputReader.nextLine();
             newReference.put(field, givenValue);
         }
         for (String n : newReference.keySet()) {
-            System.out.println(n + " - " + newReference.get(n));
+            outputPrinter.println(n + " - " + newReference.get(n));
         }
         logic.lisaaViite(newReference);
         start();
@@ -122,15 +123,15 @@ public class UI {
             int selection;
             while (true) {
                 try {
-                    selection = sc.nextInt();
+                    selection = inputReader.nextInt();
                     if (selection < lowerbound || selection > upperbound) {
                         throw new InputMismatchException();
                     }
-                    sc.nextLine();
+                    inputReader.nextLine();
                     return selection;
                 } catch (InputMismatchException e) {
-                    System.out.println("Virheellinen syöte");
-                    sc.nextLine();
+                    outputPrinter.println("Virheellinen syöte");
+                    inputReader.nextLine();
                 }
             }
         }

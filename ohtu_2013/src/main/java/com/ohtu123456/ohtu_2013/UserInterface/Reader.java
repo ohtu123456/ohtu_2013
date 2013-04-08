@@ -6,4 +6,5 @@ package com.ohtu123456.ohtu_2013.UserInterface;
  */
 public interface Reader {
     public String nextLine();
+    public int nextInt();
 }

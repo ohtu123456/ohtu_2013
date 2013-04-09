@@ -1,6 +1,12 @@
 
 description "User can add article-type reference manually"
 
+scenario "user cannot add with no data", {
+    given 'user has selected add reference'
+    when 'user inputs data'
+    then 'failure will be reported'
+}
+
 scenario "user can add article with title", {
     given 'user has selected add reference'
     when 'user inputs data'

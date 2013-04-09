@@ -59,7 +59,7 @@ public class UI {
     }
 
     private void printAll() {
-        ArrayList<Map<String,String>> allReferences = logic.annaKaikkiViitteet();
+        ArrayList<Map<String,String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> singleReference : allReferences)   {
             printReference(singleReference);
             System.out.println("---------------------------------");
@@ -93,7 +93,7 @@ public class UI {
      * Täytetään yhden viitteen tiedot, näiden tarkistus on nyt sitten toistaiseksi logiikan vastuulla
      */
     private void addReference(int id) {
-        Map<String, String> newReference = logic.annaKentat(id);
+        Map<String, String> newReference = logic.giveFields(id);
         String givenValue;
         System.out.println("Täytä seuraavat kentät: ");
         for (Iterator<String> it = newReference.keySet().iterator(); it.hasNext();) {
@@ -105,7 +105,7 @@ public class UI {
         for (String n : newReference.keySet()) {
             System.out.println(n + " - " + newReference.get(n));
         }
-        logic.lisaaViite(newReference);
+        logic.addReference(newReference);
         start();
     }
 

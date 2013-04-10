@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.springframework.stereotype.Component;
-
+import com.ohtu123456.ohtu_2013.BibtextParser.BibtextParser;
 import com.ohtu123456.ohtu_2013.Storage.Storage;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,9 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class Logic implements LogicInterface {
    
     Storage storage;
+    BibtextParser parser;
     
     public Logic() {
         storage = new Storage();
+        parser= new BibtextParser();
     }
 
     public boolean addReference(Map<String, String> reference) {
@@ -30,7 +32,8 @@ public class Logic implements LogicInterface {
     }
 
     public String printBibTex(String id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+       String g= parser.tulostaBibTex(id);
+        return g;
     }
 
     public Map<String, String> printClear(String id) {

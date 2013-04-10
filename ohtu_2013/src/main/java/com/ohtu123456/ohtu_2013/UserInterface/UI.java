@@ -42,9 +42,10 @@ public class UI {
     public void start() {
         System.out.println("Valinnat: \n"
                 + "1 - Lisää viite. \n"
-                + "2 - Tulosta kaikki.\n\n"
+                + "2 - Tulosta kaikki. \n"
+                + "3 - Tulosta Bibtext.\n\n"
                 + "0 - Sulje.");
-        int selection = validator.promptInteger(0, 2);
+        int selection = validator.promptInteger(0, 3);
         switch (selection) {
             case 0: {
                 System.exit(0);
@@ -55,15 +56,33 @@ public class UI {
             case 2: {
                 printAll();
             }
+                
+            case 3: {
+                printBibtext();
+            }    
         }
     }
 
+    
+    private void printBibtext(){
+        String bib="";
+        ArrayList<Map<String,String>> allReferences = logic.giveAllReferences();
+        for (Map<String, String> singleReference : allReferences)   {
+            for (String key : singleReference.keySet())   {
+           bib+= ","+key + "=" + singleReference.get(key);
+        }
+        }
+        
+       logic.printBibTex(bib); 
+    }
     private void printAll() {
         ArrayList<Map<String,String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> singleReference : allReferences)   {
             printReference(singleReference);
             System.out.println("---------------------------------");
         }
+        
+        
     }
     
     private void printReference(Map<String, String> reference)  {

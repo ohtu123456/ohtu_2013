@@ -21,7 +21,9 @@ public class ReaderScanner implements Reader{
     }
 
     public int nextInt() {
-        return sc.nextInt();
+        int nextInt = sc.nextInt();
+        sc.nextLine();
+        return nextInt;
     }
     
 }

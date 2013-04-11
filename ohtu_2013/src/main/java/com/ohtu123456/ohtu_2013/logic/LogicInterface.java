@@ -11,19 +11,19 @@ import java.util.Map;
 
 public interface LogicInterface {
 
-    public boolean lisaaViite(Map<String, String> viite); //Lisää viitteen ja palauttaa tiedon siitä, onnistuiko lisäys
+    public boolean addReference(Map<String, String> reference); //Lisää viitteen ja palauttaa tiedon siitä, onnistuiko lisäys
 
-    public String tulostaBibTex(String id);
+    public String printBibTex(String id);
 
-    public Map<String, String> tulostaClear(String id);
+    public Map<String, String> printClear(String id);
 
-    public ArrayList<Map<String,String>> annaKaikkiViitteet();
+    public ArrayList<Map<String,String>> giveAllReferences();
     /*
      * Logiikka voisi palauttaa id:n perusteella mapin "Avain - tyhjä" -pareja, joihin käyttöliittymä päivittää epätyhjät arvot?
-     * Syötteet pitää tarkistaa, joten mietin olisiko paras poistaa annaKentat-metodi ja lisätä tieto tarvittavista kentistä ja valideista 
+     * Syötteet pitää tarkistaa, joten mietin olisiko paras poistaa giveFields-metodi ja lisätä tieto tarvittavista kentistä ja valideista 
      * inputeista suoraan käyttöliittymään. Muuten tarkistus pitänee tehdä logiikka-luokassa. Tällöin ei pystytä antamaan käyttäjälle samantien 
      * feedbackia virheellisestä inputista, koska kaikki tiedot lähetetään logiikalle vasta kun kaikki kentät on täytetty.
      * -Leif
      */
-    public Map<String, String> annaKentat(int id); 
+    public Map<String, String> giveFields(int id); 
 }

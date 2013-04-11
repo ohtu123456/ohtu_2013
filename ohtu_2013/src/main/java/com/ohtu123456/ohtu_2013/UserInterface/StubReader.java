@@ -17,7 +17,8 @@ public class StubReader implements Reader{
         if (i < lines.length) {
             return lines[i++];
         }
-        return "";}
+        return "";
+    }
 
     public int nextInt() {
         return Integer.parseInt(lines[i++]);

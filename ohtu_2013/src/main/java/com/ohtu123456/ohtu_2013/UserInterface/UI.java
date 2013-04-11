@@ -128,7 +128,7 @@ public class UI {
         for (String n : newReference.keySet()) {
             outputPrinter.println(n + " - " + newReference.get(n));
         }
-        if(logic.lisaaViite(newReference))
+        if(logic.addReference(newReference))
             outputPrinter.println("Viite lisätty");
         start();
     }

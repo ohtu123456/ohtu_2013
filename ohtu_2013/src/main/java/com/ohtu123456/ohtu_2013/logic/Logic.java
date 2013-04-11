@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 public class Logic implements LogicInterface {
 
     public boolean lisaaViite(Map<String, String> viite) {
-        System.out.println("Viite lisätty");
         return true;
     }
 

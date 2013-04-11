@@ -1,5 +1,6 @@
 package com.ohtu123456.ohtu_2013.UserInterface;
 
+import com.ohtu123456.ohtu_2013.logic.Logic;
 import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,10 +33,11 @@ public class UI {
 
     private void initialize(Reader reader, Printer printer) {
         referenceTypes = new HashMap<String, Integer>();
-        referenceTypes.put("Book", 1);
+        referenceTypes.put("Article", 1);
         inputReader = reader;
         outputPrinter = printer;
         validator = new Validator();
+        logic = new Logic();
     }
 
     /*
@@ -126,7 +128,8 @@ public class UI {
         for (String n : newReference.keySet()) {
             outputPrinter.println(n + " - " + newReference.get(n));
         }
-        logic.addReference(newReference);
+        if(logic.addReference(newReference))
+            outputPrinter.println("Viite lisätty");
         start();
     }
 
@@ -147,11 +150,9 @@ public class UI {
                     if (selection < lowerbound || selection > upperbound) {
                         throw new InputMismatchException();
                     }
-                    inputReader.nextLine();
                     return selection;
                 } catch (InputMismatchException e) {
                     outputPrinter.println("Virheellinen syöte");
-                    inputReader.nextLine();
                 }
             }
         }

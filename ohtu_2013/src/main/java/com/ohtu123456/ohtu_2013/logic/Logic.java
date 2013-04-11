@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.springframework.stereotype.Component;
+import com.ohtu123456.ohtu_2013.BibtextParser.BibtextParser;
+import com.ohtu123456.ohtu_2013.Storage.Storage;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Pelkkä testilogiikka käyttöliittymää varten, korvataan oikealla
@@ -14,20 +17,30 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Logic implements LogicInterface {
+   
+    Storage storage;
+    BibtextParser parser;
+    
+    public Logic() {
+        storage = new Storage();
+        parser= new BibtextParser();
+    }
 
-    public boolean lisaaViite(Map<String, String> viite) {
+    public boolean addReference(Map<String, String> reference) {
+        storage.addReference(reference);
         return true;
     }
 
-    public String tulostaBibTex(String id) {
+    public String printBibTex(String id) {
+       String g= parser.tulostaBibTex(id);
+        return g;
+    }
+
+    public Map<String, String> printClear(String id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public Map<String, String> tulostaClear(String id) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Map<String, String> annaKentat(int id) {
+    public Map<String, String> giveFields(int id) {
         Map<String, String> fields = new LinkedHashMap<String, String>(); //LinkedHashMap säilyttää alkioiden järjestyksen
         fields.put("Author", null);
         fields.put("Title", null);
@@ -36,17 +49,7 @@ public class Logic implements LogicInterface {
         return fields;
     }
 
-    public ArrayList<Map<String, String>> annaKaikkiViitteet() {
-        ArrayList<Map<String, String>> kaikkiViitteet = new ArrayList<Map<String, String>>();
-        Map<String, String> viite1 = new LinkedHashMap<String, String>();
-        viite1.put("Title", "kirja1");
-        kaikkiViitteet.add(viite1);
-        Map<String, String> viite2 = new LinkedHashMap<String, String>();
-        viite2.put("Title", "kirja2");
-        kaikkiViitteet.add(viite2);
-        Map<String, String> viite3 = new LinkedHashMap<String, String>();
-        viite3.put("Title", "kirja3");
-        kaikkiViitteet.add(viite3);
-        return kaikkiViitteet;
+    public ArrayList<Map<String, String>> giveAllReferences() {
+        return storage.getReferences();
     }
 }

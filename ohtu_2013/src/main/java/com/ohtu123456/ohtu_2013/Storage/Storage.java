@@ -3,12 +3,14 @@ package com.ohtu123456.ohtu_2013.Storage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Heikki Kalliokoski
  */
-class Storage {
+@Component
+public class Storage {
 
     private List<Reference> references;
     

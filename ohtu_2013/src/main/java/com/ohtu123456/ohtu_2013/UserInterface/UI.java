@@ -1,5 +1,6 @@
 package com.ohtu123456.ohtu_2013.UserInterface;
 
+import com.ohtu123456.ohtu_2013.logic.Logic;
 import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.io.File;
 import java.util.ArrayList;
@@ -37,13 +38,12 @@ public class UI {
         inputReader = reader;
         outputPrinter = printer;
         menuChoices = new HashMap<Integer, String>();
-        referenceTypes.put("Book", 1);
+        referenceTypes.put("Article", 1);
         //Populate menuchoices
         menuChoices.put(0, "Quit \n");
         menuChoices.put(1, "Add reference \n");
         menuChoices.put(2, "Print all references \n");
         menuChoices.put(3, "Save all references as BibTex \n");
-        sc = new Scanner(System.in);
         validator = new Validator();
         logic = new Logic();
     }
@@ -77,17 +77,17 @@ public class UI {
     private void printMenu() {
         int i = 1;
         for (; i < menuChoices.size(); i++) {
-            System.out.print(i + " - " + menuChoices.get(i));
+            outputPrinter.print(i + " - " + menuChoices.get(i));
         }
-        System.out.println("");
-        System.out.print("0 - " + menuChoices.get(0));
+        outputPrinter.println("");
+        outputPrinter.print("0 - " + menuChoices.get(0));
     }
 
     private void saveAsBibtext() {
         String bib = "";
         ArrayList<Map<String, String>> allReferences = logic.giveAllReferences();
         if (allReferences.isEmpty()) {
-            System.out.println("No references!");
+            outputPrinter.println("No references!");
         } else {
             for (Map<String, String> singleReference : allReferences) {
                 for (String key : singleReference.keySet()) {
@@ -95,7 +95,7 @@ public class UI {
                 }
             }
             String savedBibTex = logic.printBibTex(bib);
-            System.out.println("Saved the following BibTex references: \n" + savedBibTex);
+            outputPrinter.println("Saved the following BibTex references: \n" + savedBibTex);
         }
         start();
     }
@@ -111,7 +111,7 @@ public class UI {
 
     private void printReference(Map<String, String> reference) {
         for (String key : reference.keySet()) {
-            System.out.println(key + ": " + reference.get(key));
+            outputPrinter.println(key + ": " + reference.get(key));
         }
     }
 
@@ -149,7 +149,7 @@ public class UI {
             outputPrinter.println(n + " - " + newReference.get(n));
         }
         if(logic.addReference(newReference))
-            outputPrinter.println("Viite lisätty");
+            outputPrinter.println("Reference added.");
         start();
     }
 

@@ -2,6 +2,7 @@ package com.ohtu123456.ohtu_2013.UserInterface;
 
 import com.ohtu123456.ohtu_2013.logic.Logic;
 import com.ohtu123456.ohtu_2013.logic.LogicInterface;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UI {
 
+    private HashMap<Integer, String> menuChoices;
     private HashMap<String, Integer> referenceTypes;
     private ArrayList<String> fields; //Viitteen vaatimat kentät, kysytään käyttäjältä
     private Reader inputReader;
@@ -33,23 +35,29 @@ public class UI {
 
     private void initialize(Reader reader, Printer printer) {
         referenceTypes = new HashMap<String, Integer>();
-        referenceTypes.put("Article", 1);
         inputReader = reader;
         outputPrinter = printer;
+        menuChoices = new HashMap<Integer, String>();
+        referenceTypes.put("Article", 1);
+        //Populate menuchoices
+        menuChoices.put(0, "Quit \n");
+        menuChoices.put(1, "Add reference \n");
+        menuChoices.put(2, "Print all references \n");
+        menuChoices.put(3, "Save all references as BibTex \n");
         validator = new Validator();
         logic = new Logic();
+    }
+
+    private void initializeMenuItems(File file) {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     /*
      * Yksinkertainen valinta-ui. Käyttäjä tekee valinnat kokonaislukusyötteillä.
      */
     public void start() {
-        outputPrinter.println("Valinnat: \n"
-                + "1 - Lisää viite. \n"
-                + "2 - Tulosta kaikki. \n"
-                + "3 - Tulosta Bibtext.\n\n"
-                + "0 - Sulje.");
-        int selection = validator.promptInteger(0, 3);
+        printMenu();
+        int selection = validator.promptInteger(0, menuChoices.size());
         switch (selection) {
             case 0: {
                 System.exit(0);
@@ -60,37 +68,49 @@ public class UI {
             case 2: {
                 printAll();
             }
-                
             case 3: {
-                printBibtext();
-            }    
+                saveAsBibtext();
+            }
         }
     }
 
-    
-    private void printBibtext(){
-        String bib="";
-        ArrayList<Map<String,String>> allReferences = logic.giveAllReferences();
-        for (Map<String, String> singleReference : allReferences)   {
-            for (String key : singleReference.keySet())   {
-           bib+= ","+key + "=" + singleReference.get(key);
+    private void printMenu() {
+        int i = 1;
+        for (; i < menuChoices.size(); i++) {
+            outputPrinter.print(i + " - " + menuChoices.get(i));
         }
-        }
-        
-       logic.printBibTex(bib); 
+        outputPrinter.println("");
+        outputPrinter.print("0 - " + menuChoices.get(0));
     }
+
+    private void saveAsBibtext() {
+        String bib = "";
+        ArrayList<Map<String, String>> allReferences = logic.giveAllReferences();
+        if (allReferences.isEmpty()) {
+            outputPrinter.println("No references!");
+        } else {
+            for (Map<String, String> singleReference : allReferences) {
+                for (String key : singleReference.keySet()) {
+                    bib += "," + key + "=" + singleReference.get(key);
+                }
+            }
+            String savedBibTex = logic.printBibTex(bib);
+            outputPrinter.println("Saved the following BibTex references: \n" + savedBibTex);
+        }
+        start();
+    }
+
     private void printAll() {
-        ArrayList<Map<String,String>> allReferences = logic.giveAllReferences();
-        for (Map<String, String> singleReference : allReferences)   {
+        ArrayList<Map<String, String>> allReferences = logic.giveAllReferences();
+        for (Map<String, String> singleReference : allReferences) {
             printReference(singleReference);
             outputPrinter.println("---------------------------------");
         }
-        
-        
+        start();
     }
-    
-    private void printReference(Map<String, String> reference)  {
-        for (String key : reference.keySet())   {
+
+    private void printReference(Map<String, String> reference) {
+        for (String key : reference.keySet()) {
             outputPrinter.println(key + ": " + reference.get(key));
         }
     }
@@ -118,7 +138,7 @@ public class UI {
     private void addReference(int id) {
         Map<String, String> newReference = logic.giveFields(id);
         String givenValue;
-        outputPrinter.println("Täytä seuraavat kentät: ");
+        outputPrinter.println("Täytä seuraavat kentät: \n");
         for (Iterator<String> it = newReference.keySet().iterator(); it.hasNext();) {
             String field = it.next();
             outputPrinter.println(field + ":");
@@ -126,10 +146,10 @@ public class UI {
             newReference.put(field, givenValue);
         }
         for (String n : newReference.keySet()) {
-            outputPrinter.println(n + " - " + newReference.get(n));
+            outputPrinter.println(n + " - " + newReference.get(n) + "\n");
         }
         if(logic.addReference(newReference))
-            outputPrinter.println("Viite lisätty");
+            outputPrinter.println("Reference added.\n");
         start();
     }
 

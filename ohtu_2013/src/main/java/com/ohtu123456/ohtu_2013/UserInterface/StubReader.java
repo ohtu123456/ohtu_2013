@@ -15,9 +15,9 @@ public class StubReader implements Reader{
 
     public String nextLine() {
         if (i < lines.length) {
-            return lines[i++];
+            return lines[i++] + "\n";
         }
-        return "";
+        return "\n";
     }
 
     public int nextInt() {

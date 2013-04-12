@@ -9,4 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public interface Printer {
     public void println(String message);
+
+    public void print(String message);
 }

@@ -21,5 +21,9 @@ public class StubPrinter implements Printer{
     public ArrayList<String> getPrints(){
         return lines;
     }
+
+    public void print(String message) {
+        lines.add(message);
+    }
     
 }

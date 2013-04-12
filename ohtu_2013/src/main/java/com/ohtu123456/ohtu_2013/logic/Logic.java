@@ -33,7 +33,7 @@ public class Logic implements LogicInterface {
 
     public String printBibTex(String id) {
        String g= parser.tulostaBibTex(id);
-        return g;
+       return g;
     }
 
     public Map<String, String> printClear(String id) {

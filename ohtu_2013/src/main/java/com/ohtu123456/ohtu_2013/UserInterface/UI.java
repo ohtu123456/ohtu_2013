@@ -138,7 +138,7 @@ public class UI {
     private void addReference(int id) {
         Map<String, String> newReference = logic.giveFields(id);
         String givenValue;
-        outputPrinter.println("Täytä seuraavat kentät: ");
+        outputPrinter.println("Täytä seuraavat kentät: \n");
         for (Iterator<String> it = newReference.keySet().iterator(); it.hasNext();) {
             String field = it.next();
             outputPrinter.println(field + ":");
@@ -146,10 +146,10 @@ public class UI {
             newReference.put(field, givenValue);
         }
         for (String n : newReference.keySet()) {
-            outputPrinter.println(n + " - " + newReference.get(n));
+            outputPrinter.println(n + " - " + newReference.get(n) + "\n");
         }
         if(logic.addReference(newReference))
-            outputPrinter.println("Reference added.");
+            outputPrinter.println("Reference added.\n");
         start();
     }
 

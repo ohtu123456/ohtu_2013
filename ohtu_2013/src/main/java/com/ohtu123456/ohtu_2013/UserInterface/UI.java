@@ -25,7 +25,6 @@ public class UI {
 
     @Autowired
     private LogicInterface logic;
-    //private Validator validator;
     //--------------------------
     private CommandLineParser parser;
     private Options menu;
@@ -77,9 +76,6 @@ public class UI {
         return opt;
     }
 
-    /*
-     * Yksinkertainen valinta-ui. Käyttäjä tekee valinnat kokonaislukusyötteillä.
-     */
     public CommandLine getDialog(Options opt) {
         help.printHelp(" ", opt, true);
         while (true) {

@@ -5,17 +5,18 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 import com.ohtu123456.ohtu_2013.BibtextParser.BibtextParser;
 import com.ohtu123456.ohtu_2013.Storage.Storage;
+import java.util.LinkedList;
 import java.util.List;
 
 @Component
 public class Logic implements LogicInterface {
-   
+
     Storage storage;
     BibtextParser parser;
-    
+
     public Logic() {
         storage = new Storage();
-        parser= new BibtextParser();
+        parser = new BibtextParser();
     }
 
     public boolean addReference(Map<String, String> reference) {
@@ -24,8 +25,8 @@ public class Logic implements LogicInterface {
     }
 
     public String printBibTex(String id) {
-       String g= parser.tulostaBibTex(id);
-       return g;
+        String g = parser.tulostaBibTex(id);
+        return g;
     }
 
     public Map<String, String> printClear(String id) {
@@ -42,8 +43,25 @@ public class Logic implements LogicInterface {
 
     /*
      * Returns all available reference types "article, book,..."
+     * Fetched from DB or hard-coded
+     * 
      */
     public List<String> getReferenceTypes() {
-        return null;
+        ArrayList<String> referenceTypes = new ArrayList<String>();
+        referenceTypes.add("book");
+        referenceTypes.add("article");
+        referenceTypes.add("inproceedings");
+        return referenceTypes;
+    }
+
+    public LinkedList<String> createNewReference(String type) {
+        LinkedList<String> fields = new LinkedList<String>();
+        fields.add("author");
+        fields.add("year");
+        return fields;
+    }
+
+    public boolean validateField(String name, Object value) {
+        return true;
     }
 }

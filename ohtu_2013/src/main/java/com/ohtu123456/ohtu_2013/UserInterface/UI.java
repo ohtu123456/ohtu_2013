@@ -1,9 +1,15 @@
 package com.ohtu123456.ohtu_2013.UserInterface;
 
+import com.ohtu123456.ohtu_2013.logic.Logic;
 import com.ohtu123456.ohtu_2013.logic.LogicInterface;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -33,13 +39,12 @@ public class UI {
     private Scanner scanner;
     //--------------------------
     private boolean saved;
+    private ArrayList<String> possibleReferences;
 
     public UI() {
-        logic.saveAllReferences();
-        initialize();
     }
 
-    private void initialize() {
+    public void initialize() {
         saved = false;
         scanner = new Scanner(System.in);
         menu = getMenuOptions();
@@ -53,7 +58,7 @@ public class UI {
             menu = getMenuOptions();
         }
         CommandLine cmd = getDialog(menu);
-        processInput(cmd);
+        processMenuInput(cmd);
     }
 
     private Options getMenuOptions() {
@@ -66,20 +71,27 @@ public class UI {
     }
 
     private Options getReferenceOptions() {
+        if (referenceOptions == null) {
+            possibleReferences = (ArrayList) logic.getReferenceTypes();
+        }
         Options opt = new Options();
-        List<String> availableReferenceTypes = logic.getReferenceTypes();
-        Iterator<String> it = availableReferenceTypes.iterator();
+        Iterator<String> it = possibleReferences.iterator();
         while (it.hasNext()) {
             String ref = it.next();
             opt.addOption(ref, false, "Add reference of type: " + ref);
         }
+        opt.addOption("menu", false, "Return to main menu");
+        opt.addOption("quit", false, "Quit program");
         return opt;
     }
 
     public CommandLine getDialog(Options opt) {
-        help.printHelp(" ", opt, true);
         while (true) {
+            help.printHelp(" ", opt, true);
             String input = scanner.nextLine();
+            if (input.equals("")) {
+                getDialog(opt);
+            }
             String[] args = input.split(" ");
             try {
                 CommandLine cmd = parser.parse(opt, args);
@@ -90,17 +102,75 @@ public class UI {
         }
     }
 
-    private void processInput(CommandLine cmd) {
+    private void processMenuInput(CommandLine cmd) {
         if (cmd.hasOption("quit")) {
             quit();
+        } else if (cmd.hasOption("add")) {
+            addReference();
+        } else if (cmd.hasOption("print")) {
+            printAllReferences();
         } else {
-            if (cmd.hasOption("add"));
-            //addReference();
+            start();
         }
     }
 
+    private void printAllReferences() {
+        ArrayList<Map<String, String>> allReferences = logic.giveAllReferences();
+        for (Map<String, String> ref : allReferences) {
+            for (String s : ref.keySet()) {
+                System.out.println(s + " - " + ref.get(s));
+            }
+            System.out.println("-------------------");
+        }
+        start();
+    }
+
+    private void addReference() {
+        LinkedList<String> requiredFields = new LinkedList<String>();
+        referenceOptions = getReferenceOptions();
+        CommandLine cmd = getDialog(referenceOptions);
+        if (cmd.hasOption("quit")) {
+            quit();
+        } else if (cmd.hasOption("return")) {
+            start();
+        } else {
+            for (String s : possibleReferences) {
+                if (cmd.hasOption(s)) {
+                    requiredFields = logic.createNewReference(s);
+                    break;
+                }
+            }
+            addReference(requiredFields);
+        }
+    }
+
+    private void addReference(List<String> fields) {
+        LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
+        System.out.println("Please fill in the following fields.");
+        for (int i = 0; i < fields.size();) {
+            String input;
+            System.out.println(fields.get(i) + ":");
+            input = scanner.nextLine();
+            if (logic.validateField(fields.get(i), input)) {
+                newReference.put(fields.get(i), input);
+                i++;
+            } else {
+                System.out.println("Invalid value.");
+            }
+        }
+        if (logic.addReference(newReference)) {
+            System.out.println("New reference added");
+        } else {
+            System.out.println("Couldn't add new reference");
+        }
+        start();
+    }
+
+    /**
+     * Quits and ensures that all changes are saved before doing so.
+     */
     private void quit() {
-        if (!saved) {           
+        if (!saved) {
             boolean success = logic.saveAllReferences();
             if (!success) {
                 System.out.println("Could not save references.");
@@ -125,84 +195,3 @@ public class UI {
         System.exit(0);
     }
 }
-//    private void saveAsBibtext() {
-//        String bib = "";
-//        ArrayList<Map<String, String>> allReferences = logic.giveAllReferences();
-//        if (allReferences.isEmpty()) {
-//            System.out.println("No references!");
-//        } else {
-//            for (Map<String, String> singleReference : allReferences) {
-//                for (String key : singleReference.keySet()) {
-//                    bib += "," + key + "=" + singleReference.get(key);
-//                }
-//            }
-//            String savedBibTex = logic.printBibTex(bib);
-//            System.out.println("Saved the following BibTex references: \n" + savedBibTex);
-//        }
-//    }
-//
-//    private void printAll() {
-//        ArrayList<Map<String, String>> allReferences = logic.giveAllReferences();
-//        for (Map<String, String> singleReference : allReferences) {
-//            printReference(singleReference);
-//            System.out.println("---------------------------------");
-//        }
-//    }
-//
-//    private void printReference(Map<String, String> reference) {
-//        for (String key : reference.keySet()) {
-//            System.out.println(key + ": " + reference.get(key));
-//        }
-//    }
-//
-    /*
- * List all known reference types and prompt, which one will be used
- */
-//
-/*
- * Täytetään yhden viitteen tiedot, näiden tarkistus on nyt sitten toistaiseksi logiikan vastuulla
- */
-//    private void addReference(int id) {
-//        Map<String, String> newReference = logic.giveFields(id);
-//        String givenValue;
-//        System.out.println("Täytä seuraavat kentät: ");
-//        for (Iterator<String> it = newReference.keySet().iterator(); it.hasNext();) {
-//            String field = it.next();
-//            System.out.println(field + ":");
-//            givenValue = sc.nextLine();
-//            newReference.put(field, givenValue);
-//        }
-//        for (String n : newReference.keySet()) {
-//            System.out.println(n + " - " + newReference.get(n));
-//        }
-//        logic.addReference(newReference);
-//        start();
-//    }
-//
-//    /*
-//     * Metodit syötteiden tarkistausta varten, tämä luokka lienee turha mikäli syötteet tarkistetaan logiikassa.
-//     * 
-//     */
-//    class Validator {
-//
-//        /*
-//         * Pyytää käyttäjältä validia kokonaislukua, kunnes se saadaan
-//         */
-//        public int promptInteger(int lowerbound, int upperbound) {
-//            int selection;
-//            while (true) {
-//                try {
-//                    selection = sc.nextInt();
-//                    if (selection < lowerbound || selection > upperbound) {
-//                        throw new InputMismatchException();
-//                    }
-//                    sc.nextLine();
-//                    return selection;
-//                } catch (InputMismatchException e) {
-//                    System.out.println("Virheellinen syöte");
-//                    sc.nextLine();
-//                }
-//            }
-//        }
-//    }
-//}

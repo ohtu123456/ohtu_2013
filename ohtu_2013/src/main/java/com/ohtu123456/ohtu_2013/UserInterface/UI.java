@@ -1,9 +1,7 @@
 package com.ohtu123456.ohtu_2013.UserInterface;
 
-import com.ohtu123456.ohtu_2013.logic.Logic;
 import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;

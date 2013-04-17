@@ -1,12 +1,12 @@
 package com.ohtu123456.ohtu_2013.logic;
 
-import java.util.ArrayList;
-import java.util.Map;
-import org.springframework.stereotype.Component;
 import com.ohtu123456.ohtu_2013.BibtextParser.BibtextParser;
 import com.ohtu123456.ohtu_2013.Storage.Storage;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import org.springframework.stereotype.Component;
 
 @Component
 public class Logic implements LogicInterface {

@@ -21,7 +21,6 @@ public class StorateTest extends TestCase {
         this.storage = new Storage();
     }
     
-    
     public void testGetReferencesReturnsEmptyList(){
         assertTrue(storage.getReferences().isEmpty());
     }

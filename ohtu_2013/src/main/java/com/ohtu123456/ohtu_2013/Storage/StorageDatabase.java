@@ -55,6 +55,7 @@ class StorageDatabase implements StorageInterface {
         server = EbeanServerFactory.create(config);
     }
 
+    @Override
     public void addReference(Map<String, String> reference) throws Exception {
         if(reference.get("type").equals("article"))
             addArticleReference(reference);

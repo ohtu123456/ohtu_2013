@@ -15,6 +15,11 @@ public class ArticleTest extends TestCase {
     
     public ArticleTest(String testName) {
         super(testName);
+    }
+    
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
         reference = new HashMap<String, String>();
         reference.put("id", "AUTH123");
         reference.put("author", "Matti Mallkias");
@@ -26,12 +31,6 @@ public class ArticleTest extends TestCase {
         reference.put("pages", "5-10");
         reference.put("publisher", "OtavaMedia");
         reference.put("address", "Suomi, Finland");
-    }
-    
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        
     }
     
     public void testIdIsAssignedCorrectly(){

@@ -95,6 +95,12 @@ public class ArticleTest extends TestCase {
         assertTrue(article.getTitle().isEmpty());
     }
     
+    public void testMissingJournalIsReplacedWithEmptyString(){
+        reference.remove("journal");
+        article = new Article(reference);
+        assertTrue(article.getJournal().isEmpty());
+    }
+    
     public void testMissingVolumeIsReplacedWithEmptyString(){
         reference.remove("journal");
         article = new Article(reference);

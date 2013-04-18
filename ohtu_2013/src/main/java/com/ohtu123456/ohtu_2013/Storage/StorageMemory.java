@@ -10,14 +10,15 @@ import org.springframework.stereotype.Component;
  * @author Heikki Kalliokoski
  */
 @Component
-public class Storage {
+public class StorageMemory implements StorageInterface {
 
     private List<Reference> references;
     
-    public Storage() {
+    public StorageMemory() {
         references = new ArrayList<Reference>();
     }
 
+    @Override
     public ArrayList<Map<String, String>> getReferences() {
         ArrayList<Map<String, String>> referencesInMapFormat = new ArrayList<Map<String, String>>();
         for(Reference ref: references){
@@ -27,6 +28,7 @@ public class Storage {
         return referencesInMapFormat;
     }
 
+    @Override
     public void addReference(Map<String, String> ref) {
         references.add(new Reference(ref));
     }

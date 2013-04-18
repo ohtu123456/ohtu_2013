@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.Map;
 import org.springframework.stereotype.Component;
 import com.ohtu123456.ohtu_2013.BibtextParser.BibtextParser;
-import com.ohtu123456.ohtu_2013.Storage.Storage;
+import com.ohtu123456.ohtu_2013.Storage.StorageMemory;
 import java.util.LinkedList;
 import java.util.List;
 
 @Component
 public class Logic implements LogicInterface {
 
-    Storage storage;
+    StorageMemory storage;
     BibtextParser parser;
 
     public Logic() {
-        storage = new Storage();
+        storage = new StorageMemory();
         parser = new BibtextParser();
     }
 

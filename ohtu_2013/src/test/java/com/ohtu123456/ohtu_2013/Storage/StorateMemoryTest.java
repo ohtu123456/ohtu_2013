@@ -8,17 +8,17 @@ import junit.framework.TestCase;
  *
  * @author Heikki Kalliokoski
  */
-public class StorateTest extends TestCase {
+public class StorateMemoryTest extends TestCase {
     
-    Storage storage;
+    StorageMemory storage;
     
-    public StorateTest(String testName) {
+    public StorateMemoryTest(String testName) {
         super(testName);
     }
     
     @Override
     protected void setUp() throws Exception {
-        this.storage = new Storage();
+        this.storage = new StorageMemory();
     }
     
     public void testGetReferencesReturnsEmptyList(){

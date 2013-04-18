@@ -1,6 +1,6 @@
 package com.ohtu123456.ohtu_2013.Storage;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,8 +9,8 @@ import java.util.Map;
  */
 public interface StorageInterface {
 
-    void addReference(Map<String, String> ref);
+    void addReference(Map<String, String> ref) throws Exception;
 
-    ArrayList<Map<String, String>> getReferences();
+    List<Map<String, String>> getReferences();
     
 }

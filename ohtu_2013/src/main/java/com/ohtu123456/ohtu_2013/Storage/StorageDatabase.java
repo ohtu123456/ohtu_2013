@@ -6,12 +6,15 @@ import com.avaje.ebean.Transaction;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebean.config.dbplatform.SQLitePlatform;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author Heikki Kalliokoski
  */
-class StorageDatabase {
+class StorageDatabase implements StorageInterface {
     
     private EbeanServer server;
 
@@ -36,6 +39,45 @@ class StorageDatabase {
         config.addClass(Book.class);
 
         server = EbeanServerFactory.create(config);
+    }
+
+    public void addReference(Map<String, String> reference) throws Exception {
+        if(reference.get("type").equals("article")){
+            Article exists = server.find(Article.class).where().like("shortId", reference.get("id")).findUnique();
+            if(exists != null)
+                throw new Exception("Reference exists already.");
+            
+            server.save(new Article(reference));
+        } else if(reference.get("type").equals("book")){
+            Book exists = server.find(Book.class).where().like("shortId", reference.get("id")).findUnique();
+            if(exists != null)
+                throw new Exception("Reference exists already.");
+            
+            server.save(new Book(reference));
+        } else if(reference.get("type").equals("inproceeding")){
+            Inproceeding exists = server.find(Inproceeding.class).where().like("shortId", reference.get("id")).findUnique();
+            if(exists != null)
+                throw new Exception("Reference exists already.");
+        } else
+            throw new Exception("Unknown reference type.");
+    }
+
+    public List<Map<String, String>> getReferences() {
+        List<Map<String, String>> references = new ArrayList<Map<String, String>>();
+        
+        List<Article> articles = server.find(Article.class).findList();
+        for(Article article: articles)
+            references.add(article.getReference());
+        
+        List<Book> books = server.find(Book.class).findList();
+        for(Book book: books)
+            references.add(book.getReference());
+        
+        List<Inproceeding> inproceedings = server.find(Inproceeding.class).findList();
+        for(Inproceeding inproceeding: inproceedings)
+            references.add(inproceeding.getReference());
+        
+        return references;
     }
     
 }

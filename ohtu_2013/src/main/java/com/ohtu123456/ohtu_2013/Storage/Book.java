@@ -1,5 +1,6 @@
 package com.ohtu123456.ohtu_2013.Storage;
 
+import java.util.HashMap;
 import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,7 +10,7 @@ import javax.persistence.Id;
  * @author Heikki Kalliokoski
  */
 @Entity
-public class Book {
+public class Book implements ReferenceInterface {
     
     @Id
     private Integer id;
@@ -85,5 +86,17 @@ public class Book {
 
     public void setPublisher(String publisher) {
         this.publisher = publisher;
+    }
+    
+     public Map<String, String> getReference() {
+        
+        Map<String, String> reference = new HashMap<String, String>();
+        reference.put("id", shortId);
+        reference.put("author", author);
+        reference.put("title", title);
+        reference.put("year", publishYear);
+        reference.put("publisher", publisher);
+                
+        return reference;
     }
 }

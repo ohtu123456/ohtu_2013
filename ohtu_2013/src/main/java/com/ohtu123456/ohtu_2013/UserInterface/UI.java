@@ -121,6 +121,7 @@ public class UI {
                 System.out.println(s + " - " + ref.get(s));
             }
             System.out.println("-------------------");
+        String h=logic.printBibTex("");
         }
         start();
     }

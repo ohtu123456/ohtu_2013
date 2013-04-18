@@ -6,14 +6,18 @@ import com.avaje.ebean.Transaction;
 import com.avaje.ebean.config.DataSourceConfig;
 import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebean.config.dbplatform.SQLitePlatform;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.OptimisticLockException;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Heikki Kalliokoski
  */
+@Component
 class StorageDatabase implements StorageInterface {
     
     private EbeanServer server;
@@ -37,28 +41,39 @@ class StorageDatabase implements StorageInterface {
         config.addClass(Article.class);
         config.addClass(Inproceeding.class);
         config.addClass(Book.class);
+        
+        File dbFile = new File(databaseFilePath);
+        if(!dbFile.exists()){
+            config.setDdlGenerate(true);
+            config.setDdlRun(true);
+        } else {
+            config.setDdlGenerate(false);
+            config.setDdlRun(false);
+        }
+        dbFile = null;
 
         server = EbeanServerFactory.create(config);
     }
 
     public void addReference(Map<String, String> reference) throws Exception {
-        if(reference.get("type").equals("article")){
-            Article exists = server.find(Article.class).where().like("shortId", reference.get("id")).findUnique();
-            if(exists != null)
-                throw new Exception("Reference exists already.");
-            
-            server.save(new Article(reference));
-        } else if(reference.get("type").equals("book")){
-            Book exists = server.find(Book.class).where().like("shortId", reference.get("id")).findUnique();
-            if(exists != null)
-                throw new Exception("Reference exists already.");
-            
-            server.save(new Book(reference));
-        } else if(reference.get("type").equals("inproceeding")){
-            Inproceeding exists = server.find(Inproceeding.class).where().like("shortId", reference.get("id")).findUnique();
-            if(exists != null)
-                throw new Exception("Reference exists already.");
-        } else
+        if(reference.get("type").equals("article"))
+            addArticleReference(reference);
+         else if(reference.get("type").equals("book"))
+            addBookReference(reference);
+         else if(reference.get("type").equals("inproceeding"))
+            addInproceedingReference(reference);
+         else
+            throw new Exception("Unknown reference type.");
+    }
+    
+    public void addReference(String type, Map<String, String> reference) throws Exception{
+        if(type.equals("article"))
+            addArticleReference(reference);
+        else if(type.equals("book"))
+            addBookReference(reference);
+        else if(type.equals("inproceedings"))
+            addInproceedingReference(reference);
+        else
             throw new Exception("Unknown reference type.");
     }
 
@@ -78,6 +93,30 @@ class StorageDatabase implements StorageInterface {
             references.add(inproceeding.getReference());
         
         return references;
+    }
+
+    private void addArticleReference(Map<String, String> reference) throws OptimisticLockException, Exception {
+        Article exists = server.find(Article.class).where().like("shortId", reference.get("id")).findUnique();
+        if(exists != null)
+            throw new Exception("Reference exists already.");
+        
+        server.save(new Article(reference));
+    }
+
+    private void addBookReference(Map<String, String> reference) throws Exception, OptimisticLockException {
+        Book exists = server.find(Book.class).where().like("shortId", reference.get("id")).findUnique();
+        if(exists != null)
+            throw new Exception("Reference exists already.");
+        
+        server.save(new Book(reference));
+    }
+
+    private void addInproceedingReference(Map<String, String> reference) throws OptimisticLockException, Exception {
+        Inproceeding exists = server.find(Inproceeding.class).where().like("shortId", reference.get("id")).findUnique();
+        if(exists != null)
+            throw new Exception("Reference exists already.");
+        
+        server.save(new Inproceeding(reference));
     }
     
 }

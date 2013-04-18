@@ -2,14 +2,16 @@ package com.ohtu123456.ohtu_2013.Storage;
 
 import java.util.Map;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  *
  * @author Heikki Kalliokoski
  */
 @Entity
-class Book {
+public class Book {
     
+    @Id
     private Integer id;
     
     private String shortId;

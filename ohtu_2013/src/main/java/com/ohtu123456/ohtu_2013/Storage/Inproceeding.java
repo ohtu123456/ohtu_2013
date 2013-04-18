@@ -1,13 +1,17 @@
 package com.ohtu123456.ohtu_2013.Storage;
 
 import java.util.Map;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  *
  * @author Heikki Kalliokoski
  */
-class Inproceeding {
+@Entity
+public class Inproceeding {
     
+    @Id
     private Integer id;
     
     private String shortId;

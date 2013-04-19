@@ -43,7 +43,7 @@ public void testAakkoset(){
 }
 public void testtulostaBibTex (){
     
-    assertNotSame("",bib.tulostaBibTex(""));
+    assertNotSame("",bib.tulostaBibTex("ww"));
 }
 
 }

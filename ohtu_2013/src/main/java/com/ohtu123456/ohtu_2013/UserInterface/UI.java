@@ -1,7 +1,6 @@
 package com.ohtu123456.ohtu_2013.UserInterface;
 
 import com.ohtu123456.ohtu_2013.logic.Logic;
-import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Iterator;
@@ -9,7 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import javax.naming.directory.AttributeInUseException;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -36,7 +34,7 @@ public class UI {
     private Options menu;
     private Options referenceOptions;
     private HelpFormatter help;
-    private Scanner scanner;
+    private IO io;
     //--------------------------
     private boolean saved;
     private ArrayList<String> possibleReferences;
@@ -46,7 +44,7 @@ public class UI {
 
     public void initialize(){
         saved = false;
-        scanner = new Scanner(System.in);
+        io = new ConsoleIO();
         menu = getMenuOptions();
         parser = new BasicParser();
         help = new HelpFormatter();
@@ -89,7 +87,7 @@ public class UI {
     public CommandLine getDialog(Options opt) {
         while (true) {
             help.printHelp(" ", opt, true);
-            String input = scanner.nextLine();
+            String input = io.nextLine();
             if (input.equals("")) {
                 getDialog(opt);
             }
@@ -98,7 +96,7 @@ public class UI {
                 CommandLine cmd = parser.parse(opt, args);
                 return cmd;
             } catch (ParseException e) {
-                System.out.println("Parsing caused exception: " + e.getMessage());
+                io.println("Parsing caused exception: " + e.getMessage());
             }
         }
     }
@@ -119,9 +117,9 @@ public class UI {
         List<Map<String, String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> ref : allReferences) {
             for (String s : ref.keySet()) {
-                System.out.println(s + " - " + ref.get(s));
+                io.println(s + " - " + ref.get(s));
             }
-            System.out.println("-------------------");
+            io.println("-------------------");
         }
         //String h=logic.printBibTex("");
         start();
@@ -150,23 +148,23 @@ public class UI {
     
     private void addReference(String type, List<String> fields){
         LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
-        System.out.println("Please fill in the following fields.");
+        io.println("Please fill in the following fields.");
         for (int i = 0; i < fields.size();) {
             String input;
-            System.out.println(fields.get(i) + ":");
-            input = scanner.nextLine();
+            io.println(fields.get(i) + ":");
+            input = io.nextLine();
             if (logic.validateField(fields.get(i), input)) {
                 newReference.put(fields.get(i), input);
                 i++;
             } else {
-                System.out.println("Invalid value.");
+                io.println("Invalid value.");
             }
         }
         try{
             logic.addReference(type, newReference);
-            System.out.println("New reference added");
+            io.println("New reference added");
         } catch (AttributeInUseException e){
-            System.out.println("Couldn't add new reference");
+            io.println("Couldn't add new reference");
         }
         start();
     }
@@ -174,23 +172,23 @@ public class UI {
 
     private void addReference(List<String> fields){
         LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
-        System.out.println("Please fill in the following fields.");
+        io.println("Please fill in the following fields.");
         for (int i = 0; i < fields.size();) {
             String input;
-            System.out.println(fields.get(i) + ":");
-            input = scanner.nextLine();
+            io.println(fields.get(i) + ":");
+            input = io.nextLine();
             if (logic.validateField(fields.get(i), input)) {
                 newReference.put(fields.get(i), input);
                 i++;
             } else {
-                System.out.println("Invalid value.");
+                io.println("Invalid value.");
             }
         }
         try{
             logic.addReference(newReference);
-            System.out.println("New reference added");
+            io.println("New reference added");
         } catch (AttributeInUseException e){
-            System.out.println("Couldn't add new reference");
+            io.println("Couldn't add new reference");
         }
         start();
     }
@@ -202,10 +200,10 @@ public class UI {
         if (!saved) {
             boolean success = logic.saveAllReferences();
             if (!success) {
-                System.out.println("Could not save references.");
-                System.out.println("quit anyway? (y/n)");
+                io.println("Could not save references.");
+                io.println("quit anyway? (y/n)");
                 try {
-                    String answer = scanner.nextLine();
+                    String answer = io.nextLine();
                     if (answer.equals("y")) {
                         System.exit(0);
                     } else if (answer.equals("n")) {
@@ -214,11 +212,11 @@ public class UI {
                         throw new InputMismatchException("Invalid argument");
                     }
                 } catch (InputMismatchException e) {
-                    System.out.println(e.getMessage());
+                    io.println(e.getMessage());
                     quit();
                 }
             } else {
-                System.out.println("All references saved");
+                io.println("All references saved");
             }
         }
         System.exit(0);

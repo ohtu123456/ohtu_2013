@@ -115,6 +115,18 @@ public class InproceedingTest extends TestCase {
         inproceeding = new Inproceeding(reference);
         assertTrue(inproceeding.getAddress().isEmpty());
     }
+    
+    public void testGetReferenceReturnsAllFields(){
+        inproceeding = new Inproceeding(reference);
+        Map<String, String> returnedData = inproceeding.getReference();
+        assertEquals(returnedData.keySet(), reference.keySet());
+    }
+    
+    public void testGetReferenceReturnsCorrectValues(){
+        inproceeding = new Inproceeding(reference);
+        Map<String, String> returnedData = inproceeding.getReference();
+        assertEquals(returnedData, reference);
+    }
  
     
 }

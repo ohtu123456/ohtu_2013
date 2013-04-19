@@ -136,4 +136,16 @@ public class ArticleTest extends TestCase {
         article = new Article(reference);
         assertTrue(article.getAddress().isEmpty());
     }
+    
+    public void testGetReferenceReturnsAllFields(){
+        article = new Article(reference);
+        Map<String, String> returnedData = article.getReference();
+        assertEquals(returnedData.keySet(), reference.keySet());
+    }
+    
+    public void testGetReferenceReturnsCorrectValues(){
+        article = new Article(reference);
+        Map<String, String> returnedData = article.getReference();
+        assertEquals(returnedData, reference);
+    }
 }

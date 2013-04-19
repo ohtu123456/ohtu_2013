@@ -76,4 +76,16 @@ public class BookTest extends TestCase {
         book = new Book(reference);
         assertTrue(book.getPublisher().isEmpty());
     }
+    
+    public void testGetReferenceReturnsAllFields(){
+        book = new Book(reference);
+        Map<String, String> returnedData = book.getReference();
+        assertEquals(returnedData.keySet(), reference.keySet());
+    }
+    
+    public void testGetReferenceReturnsCorrectValues(){
+        book = new Book(reference);
+        Map<String, String> returnedData = book.getReference();
+        assertEquals(returnedData, reference);
+    }
 }

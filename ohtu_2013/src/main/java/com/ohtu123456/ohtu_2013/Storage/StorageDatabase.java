@@ -16,11 +16,11 @@ import javax.persistence.OptimisticLockException;
  *
  * @author Heikki Kalliokoski
  */
-class StorageDatabase implements StorageInterface {
+public class StorageDatabase implements StorageInterface {
     
     private EbeanServer server;
 
-    StorageDatabase(String databaseFilePath) {
+    public StorageDatabase(String databaseFilePath) {
         ServerConfig config = new ServerConfig();
         config.setName("referenceDatabase");
 
@@ -116,6 +116,5 @@ class StorageDatabase implements StorageInterface {
             throw new Exception("Reference exists already.");
         
         server.save(new Inproceeding(reference));
-    }
-    
+    }   
 }

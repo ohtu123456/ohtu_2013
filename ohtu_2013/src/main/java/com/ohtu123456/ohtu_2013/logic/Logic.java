@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.Map;
 import org.springframework.stereotype.Component;
 import com.ohtu123456.ohtu_2013.BibtextParser.BibtextParser;
-import com.ohtu123456.ohtu_2013.Storage.StorageMemory;
+import com.ohtu123456.ohtu_2013.Storage.StorageDatabase;
 import java.util.LinkedList;
 import java.util.List;
 
 @Component
 public class Logic implements LogicInterface {
 
-    StorageMemory storage;
+    StorageDatabase dbStorage;
     BibtextParser parser;
 
     public Logic() {
-        storage = new StorageMemory();
+        dbStorage = new StorageDatabase("./testiTietokanta.sqlite");
         parser = new BibtextParser();
     }
 
-    public boolean addReference(Map<String, String> reference) {
-        storage.addReference(reference);
+    public boolean addReference(Map<String, String> reference) throws Exception {
+        dbStorage.addReference("article", reference);
         return true;
     }
 
@@ -33,8 +33,8 @@ public class Logic implements LogicInterface {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public ArrayList<Map<String, String>> giveAllReferences() {
-        return storage.getReferences();
+    public List<Map<String, String>> giveAllReferences() {
+        return dbStorage.getReferences();
     }
 
     public boolean saveAllReferences() {

@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.naming.directory.AttributeInUseException;
 import javax.persistence.OptimisticLockException;
 
 /**
@@ -68,15 +69,13 @@ public class StorageDatabase {
      * @param reference     Reference data to be added
      * @throws Exception
      */
-    public void addReference(Map<String, String> reference) throws Exception {
+    public void addReference(Map<String, String> reference) throws AttributeInUseException {
         if(reference.get("type").equals("article"))
             addArticleReference(reference);
          else if(reference.get("type").equals("book"))
             addBookReference(reference);
          else if(reference.get("type").equals("inproceeding"))
             addInproceedingReference(reference);
-         else
-            throw new Exception("Unknown reference type.");
     }
     
     
@@ -88,15 +87,13 @@ public class StorageDatabase {
      * @param reference     Reference data
      * @throws Exception
      */
-    public void addReference(String type, Map<String, String> reference) throws Exception{
+    public void addReference(String type, Map<String, String> reference) throws AttributeInUseException{
         if(type.equals("article"))
             addArticleReference(reference);
         else if(type.equals("book"))
             addBookReference(reference);
         else if(type.equals("inproceedings"))
             addInproceedingReference(reference);
-        else
-            throw new Exception("Unknown reference type.");
     }
 
     
@@ -123,26 +120,26 @@ public class StorageDatabase {
         return references;
     }
 
-    private void addArticleReference(Map<String, String> reference) throws OptimisticLockException, Exception {
+    private void addArticleReference(Map<String, String> reference) throws OptimisticLockException, AttributeInUseException {
         Article exists = server.find(Article.class).where().like("shortId", reference.get("id")).findUnique();
         if(exists != null)
-            throw new Exception("Reference exists already.");
+            throw new AttributeInUseException("Reference exists already.");
         
         server.save(new Article(reference));
     }
 
-    private void addBookReference(Map<String, String> reference) throws Exception, OptimisticLockException {
+    private void addBookReference(Map<String, String> reference) throws AttributeInUseException, OptimisticLockException {
         Book exists = server.find(Book.class).where().like("shortId", reference.get("id")).findUnique();
         if(exists != null)
-            throw new Exception("Reference exists already.");
+            throw new AttributeInUseException("Reference exists already.");
         
         server.save(new Book(reference));
     }
 
-    private void addInproceedingReference(Map<String, String> reference) throws OptimisticLockException, Exception {
+    private void addInproceedingReference(Map<String, String> reference) throws OptimisticLockException, AttributeInUseException {
         Inproceeding exists = server.find(Inproceeding.class).where().like("shortId", reference.get("id")).findUnique();
         if(exists != null)
-            throw new Exception("Reference exists already.");
+            throw new AttributeInUseException("Reference exists already.");
         
         server.save(new Inproceeding(reference));
     }   

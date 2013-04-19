@@ -7,6 +7,7 @@ import com.ohtu123456.ohtu_2013.BibtextParser.BibtextParser;
 import com.ohtu123456.ohtu_2013.Storage.StorageDatabase;
 import java.util.LinkedList;
 import java.util.List;
+import javax.naming.directory.AttributeInUseException;
 
 @Component
 public class Logic implements LogicInterface {
@@ -19,7 +20,7 @@ public class Logic implements LogicInterface {
         parser = new BibtextParser();
     }
 
-    public boolean addReference(Map<String, String> reference) throws Exception {
+    public boolean addReference(Map<String, String> reference) throws AttributeInUseException {
         dbStorage.addReference("article", reference);
         return true;
     }

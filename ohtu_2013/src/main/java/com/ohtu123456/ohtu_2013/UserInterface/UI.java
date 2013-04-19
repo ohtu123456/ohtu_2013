@@ -1,9 +1,7 @@
 package com.ohtu123456.ohtu_2013.UserInterface;
 
-import com.ohtu123456.ohtu_2013.logic.Logic;
 import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -11,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import javax.naming.directory.AttributeInUseException;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -62,6 +61,7 @@ public class UI {
     }
 
     private Options getMenuOptions() {
+        //TODO: Lisättävä johonkin kohtin, ennen uusien viitteiden lisäämistä kysely, mihin tiedostoon tallennetaan
         Options opt = new Options();
         opt.addOption("add", false, "Add Reference.");
         opt.addOption("print", false, "Print all references.");
@@ -121,8 +121,8 @@ public class UI {
                 System.out.println(s + " - " + ref.get(s));
             }
             System.out.println("-------------------");
-        String h=logic.printBibTex("");
         }
+        String h=logic.printBibTex("");
         start();
     }
 
@@ -159,9 +159,10 @@ public class UI {
                 System.out.println("Invalid value.");
             }
         }
-        if (logic.addReference(newReference)) {
+        try{
+            logic.addReference(newReference);
             System.out.println("New reference added");
-        } else {
+        } catch (AttributeInUseException e){
             System.out.println("Couldn't add new reference");
         }
         start();

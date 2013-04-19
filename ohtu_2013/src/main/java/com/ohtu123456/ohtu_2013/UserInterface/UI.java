@@ -3,7 +3,6 @@ package com.ohtu123456.ohtu_2013.UserInterface;
 import com.ohtu123456.ohtu_2013.logic.Logic;
 import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -11,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import javax.naming.directory.AttributeInUseException;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 public class UI {
 
     @Autowired
-    private LogicInterface logic;
+    private Logic logic;
     //--------------------------
     private CommandLineParser parser;
     private Options menu;
@@ -44,7 +44,7 @@ public class UI {
     public UI() {
     }
 
-    public void initialize() {
+    public void initialize(){
         saved = false;
         scanner = new Scanner(System.in);
         menu = getMenuOptions();
@@ -53,7 +53,7 @@ public class UI {
         start();
     }
 
-    public void start() {
+    public void start(){
         if (menu == null) {
             menu = getMenuOptions();
         }
@@ -62,6 +62,7 @@ public class UI {
     }
 
     private Options getMenuOptions() {
+        //TODO: Lisättävä johonkin kohtin, ennen uusien viitteiden lisäämistä kysely, mihin tiedostoon tallennetaan
         Options opt = new Options();
         opt.addOption("add", false, "Add Reference.");
         opt.addOption("print", false, "Print all references.");
@@ -102,7 +103,7 @@ public class UI {
         }
     }
 
-    private void processMenuInput(CommandLine cmd) {
+    private void processMenuInput(CommandLine cmd){
         if (cmd.hasOption("quit")) {
             quit();
         } else if (cmd.hasOption("add")) {
@@ -114,19 +115,21 @@ public class UI {
         }
     }
 
-    private void printAllReferences() {
-        ArrayList<Map<String, String>> allReferences = logic.giveAllReferences();
+    private void printAllReferences(){
+        List<Map<String, String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> ref : allReferences) {
             for (String s : ref.keySet()) {
                 System.out.println(s + " - " + ref.get(s));
             }
             System.out.println("-------------------");
         }
+        //String h=logic.printBibTex("");
         start();
     }
 
-    private void addReference() {
+    private void addReference(){
         LinkedList<String> requiredFields = new LinkedList<String>();
+        String referenceType = "";
         referenceOptions = getReferenceOptions();
         CommandLine cmd = getDialog(referenceOptions);
         if (cmd.hasOption("quit")) {
@@ -137,14 +140,15 @@ public class UI {
             for (String s : possibleReferences) {
                 if (cmd.hasOption(s)) {
                     requiredFields = logic.createNewReference(s);
+                    referenceType = s;
                     break;
                 }
             }
-            addReference(requiredFields);
+            addReference(referenceType, requiredFields);
         }
     }
-
-    private void addReference(List<String> fields) {
+    
+    private void addReference(String type, List<String> fields){
         LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
         System.out.println("Please fill in the following fields.");
         for (int i = 0; i < fields.size();) {
@@ -158,9 +162,34 @@ public class UI {
                 System.out.println("Invalid value.");
             }
         }
-        if (logic.addReference(newReference)) {
+        try{
+            logic.addReference(type, newReference);
             System.out.println("New reference added");
-        } else {
+        } catch (AttributeInUseException e){
+            System.out.println("Couldn't add new reference");
+        }
+        start();
+    }
+   
+
+    private void addReference(List<String> fields){
+        LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
+        System.out.println("Please fill in the following fields.");
+        for (int i = 0; i < fields.size();) {
+            String input;
+            System.out.println(fields.get(i) + ":");
+            input = scanner.nextLine();
+            if (logic.validateField(fields.get(i), input)) {
+                newReference.put(fields.get(i), input);
+                i++;
+            } else {
+                System.out.println("Invalid value.");
+            }
+        }
+        try{
+            logic.addReference(newReference);
+            System.out.println("New reference added");
+        } catch (AttributeInUseException e){
             System.out.println("Couldn't add new reference");
         }
         start();
@@ -169,7 +198,7 @@ public class UI {
     /**
      * Quits and ensures that all changes are saved before doing so.
      */
-    private void quit() {
+    private void quit(){
         if (!saved) {
             boolean success = logic.saveAllReferences();
             if (!success) {

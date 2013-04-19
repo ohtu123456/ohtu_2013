@@ -3,18 +3,17 @@ package com.ohtu123456.ohtu_2013.Storage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.springframework.stereotype.Component;
 
 /**
+ * Simple in-memory storage of references
  *
  * @author Heikki Kalliokoski
  */
-@Component
-public class Storage {
+public class StorageMemory {
 
     private List<Reference> references;
     
-    public Storage() {
+    public StorageMemory() {
         references = new ArrayList<Reference>();
     }
 

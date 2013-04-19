@@ -1,19 +1,19 @@
 package com.ohtu123456.ohtu_2013.logic;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import javax.naming.directory.AttributeInUseException;
 
 public interface LogicInterface {
 
-    public boolean addReference(Map<String, String> reference); 
+    public boolean addReference(Map<String, String> reference) throws AttributeInUseException; 
 
     public String printBibTex(String id);
 
     public Map<String, String> printClear(String id);
 
-    public ArrayList<Map<String, String>> giveAllReferences();
+    public List<Map<String, String>> giveAllReferences();
 
     public boolean saveAllReferences();
 

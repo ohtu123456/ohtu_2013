@@ -16,12 +16,12 @@ public class Logic implements LogicInterface {
     BibtextParser parser;
 
     public Logic() {
-        dbStorage = new StorageDatabase("./testiTietokanta.sqlite");
+        dbStorage = new StorageDatabase("./target/testiTietokanta.sqlite");
         parser = new BibtextParser();
     }
 
     public boolean addReference(Map<String, String> reference) throws AttributeInUseException {
-        dbStorage.addReference("article", reference);
+        dbStorage.addReference(reference);
         return true;
     }
     
@@ -76,7 +76,6 @@ public class Logic implements LogicInterface {
         } else if(type.equals("inproceedings")){
             fields.add("booktitle");
             fields.add("pages");
-            fields.add("publisher");
         }
         return fields;
     }

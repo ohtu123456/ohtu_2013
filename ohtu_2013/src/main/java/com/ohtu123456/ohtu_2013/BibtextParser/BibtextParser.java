@@ -83,7 +83,7 @@ public class BibtextParser {
 
         try {
 
-            FileWriter fs = new FileWriter("sigproc.bib", true);
+            FileWriter fs = new FileWriter("./target/sigproc.bib", true);
             BufferedWriter bw = new BufferedWriter(fs);
             bw.write(paluu);
             bw.newLine();

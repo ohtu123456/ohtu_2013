@@ -24,6 +24,11 @@ public class Logic implements LogicInterface {
         dbStorage.addReference("article", reference);
         return true;
     }
+    
+    public boolean addReference(String type, Map<String, String> reference) throws AttributeInUseException{
+        dbStorage.addReference(type, reference);
+        return true;
+    }
 
     public String printBibTex(String id) {
         String g = parser.tulostaBibTex(id);

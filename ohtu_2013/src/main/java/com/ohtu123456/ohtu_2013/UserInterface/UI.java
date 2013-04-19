@@ -1,5 +1,6 @@
 package com.ohtu123456.ohtu_2013.UserInterface;
 
+import com.ohtu123456.ohtu_2013.logic.Logic;
 import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -29,7 +30,7 @@ import org.springframework.stereotype.Component;
 public class UI {
 
     @Autowired
-    private LogicInterface logic;
+    private Logic logic;
     //--------------------------
     private CommandLineParser parser;
     private Options menu;
@@ -122,12 +123,13 @@ public class UI {
             }
             System.out.println("-------------------");
         }
-        String h=logic.printBibTex("");
+        //String h=logic.printBibTex("");
         start();
     }
 
     private void addReference(){
         LinkedList<String> requiredFields = new LinkedList<String>();
+        String referenceType = "";
         referenceOptions = getReferenceOptions();
         CommandLine cmd = getDialog(referenceOptions);
         if (cmd.hasOption("quit")) {
@@ -138,12 +140,37 @@ public class UI {
             for (String s : possibleReferences) {
                 if (cmd.hasOption(s)) {
                     requiredFields = logic.createNewReference(s);
+                    referenceType = s;
                     break;
                 }
             }
-            addReference(requiredFields);
+            addReference(referenceType, requiredFields);
         }
     }
+    
+    private void addReference(String type, List<String> fields){
+        LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
+        System.out.println("Please fill in the following fields.");
+        for (int i = 0; i < fields.size();) {
+            String input;
+            System.out.println(fields.get(i) + ":");
+            input = scanner.nextLine();
+            if (logic.validateField(fields.get(i), input)) {
+                newReference.put(fields.get(i), input);
+                i++;
+            } else {
+                System.out.println("Invalid value.");
+            }
+        }
+        try{
+            logic.addReference(type, newReference);
+            System.out.println("New reference added");
+        } catch (AttributeInUseException e){
+            System.out.println("Couldn't add new reference");
+        }
+        start();
+    }
+   
 
     private void addReference(List<String> fields){
         LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();

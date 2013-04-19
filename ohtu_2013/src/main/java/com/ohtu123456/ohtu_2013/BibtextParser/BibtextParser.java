@@ -135,4 +135,9 @@ public class BibtextParser {
             + "publisher = Prentice Hall::"
             + "title=Agile Software Development with SCRUM::"
             + "year=2002";
+    
+    
+    public String convertToBibtext(Map<String, String> reference){
+        return "";
+    }
 }

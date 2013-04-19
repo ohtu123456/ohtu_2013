@@ -43,7 +43,7 @@ public class UI {
     public UI() {
     }
 
-    public void initialize() throws Exception {
+    public void initialize(){
         saved = false;
         scanner = new Scanner(System.in);
         menu = getMenuOptions();
@@ -52,7 +52,7 @@ public class UI {
         start();
     }
 
-    public void start() throws Exception {
+    public void start(){
         if (menu == null) {
             menu = getMenuOptions();
         }
@@ -102,7 +102,7 @@ public class UI {
         }
     }
 
-    private void processMenuInput(CommandLine cmd) throws Exception {
+    private void processMenuInput(CommandLine cmd){
         if (cmd.hasOption("quit")) {
             quit();
         } else if (cmd.hasOption("add")) {
@@ -114,7 +114,7 @@ public class UI {
         }
     }
 
-    private void printAllReferences() throws Exception {
+    private void printAllReferences(){
         List<Map<String, String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> ref : allReferences) {
             for (String s : ref.keySet()) {
@@ -126,7 +126,7 @@ public class UI {
         start();
     }
 
-    private void addReference() throws Exception {
+    private void addReference(){
         LinkedList<String> requiredFields = new LinkedList<String>();
         referenceOptions = getReferenceOptions();
         CommandLine cmd = getDialog(referenceOptions);
@@ -145,7 +145,7 @@ public class UI {
         }
     }
 
-    private void addReference(List<String> fields) throws Exception {
+    private void addReference(List<String> fields){
         LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
         System.out.println("Please fill in the following fields.");
         for (int i = 0; i < fields.size();) {
@@ -171,7 +171,7 @@ public class UI {
     /**
      * Quits and ensures that all changes are saved before doing so.
      */
-    private void quit() throws Exception {
+    private void quit(){
         if (!saved) {
             boolean success = logic.saveAllReferences();
             if (!success) {

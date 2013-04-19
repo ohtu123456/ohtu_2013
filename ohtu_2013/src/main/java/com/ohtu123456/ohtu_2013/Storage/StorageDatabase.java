@@ -11,13 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.OptimisticLockException;
-import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Heikki Kalliokoski
  */
-@Component
 class StorageDatabase implements StorageInterface {
     
     private EbeanServer server;

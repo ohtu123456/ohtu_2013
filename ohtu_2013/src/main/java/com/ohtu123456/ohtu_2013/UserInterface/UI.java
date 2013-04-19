@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -70,11 +71,12 @@ public class UI {
      * @param input String containing user input, separated with \n
      */
     public void setInput(String userInput) {
-        input = new ByteArrayInputStream(userInput.getBytes());
+        scanner = new Scanner(new ByteArrayInputStream(userInput.getBytes()));
     }
 
     /**
-     * Set program to output to a file, so that easyB can check for program output 
+     * Set program to output to a file, so that easyB can check for program
+     * output
      */
     public void setOutput(String file) {
         try {
@@ -116,7 +118,7 @@ public class UI {
         return opt;
     }
 
-    public CommandLine getDialog(Options opt) {
+    private CommandLine getDialog(Options opt) {
         while (true) {
             help.printHelp(" ", opt, true);
             String uinput = scanner.nextLine();

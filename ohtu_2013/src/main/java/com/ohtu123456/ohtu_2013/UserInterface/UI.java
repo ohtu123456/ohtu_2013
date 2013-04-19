@@ -142,6 +142,14 @@ public class UI {
             addReference();
         } else if (cmd.hasOption("print")) {
             printAllReferences();
+        } else if (cmd.hasOption("save")) {
+            saved = logic.saveAllReferences();
+            if (saved) {
+                output.println("All references saved.");
+            } else {
+                output.println("Save failed.");
+            }
+            start();
         } else {
             start();
         }

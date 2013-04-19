@@ -1,19 +1,13 @@
 package com.ohtu123456.ohtu_2013.logic;
 
+import java.util.ArrayList;
+import java.util.Map;
+import org.springframework.stereotype.Component;
 import com.ohtu123456.ohtu_2013.BibtextParser.BibtextParser;
-<<<<<<< HEAD
 import com.ohtu123456.ohtu_2013.Storage.StorageDatabase;
 import java.util.LinkedList;
 import java.util.List;
 import javax.naming.directory.AttributeInUseException;
-=======
-import com.ohtu123456.ohtu_2013.Storage.Storage;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import org.springframework.stereotype.Component;
->>>>>>> leqdevel
 
 @Component
 public class Logic implements LogicInterface {

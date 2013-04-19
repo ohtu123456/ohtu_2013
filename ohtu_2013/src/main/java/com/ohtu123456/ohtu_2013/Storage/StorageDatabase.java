@@ -17,7 +17,7 @@ import javax.persistence.OptimisticLockException;
  *
  * @author Heikki Kalliokoski
  */
-public class StorageDatabase implements StorageInterface {
+public class StorageDatabase {
     
     private EbeanServer server;
 
@@ -68,7 +68,6 @@ public class StorageDatabase implements StorageInterface {
      * @param reference     Reference data to be added
      * @throws Exception
      */
-    @Override
     public void addReference(Map<String, String> reference) throws Exception {
         if(reference.get("type").equals("article"))
             addArticleReference(reference);

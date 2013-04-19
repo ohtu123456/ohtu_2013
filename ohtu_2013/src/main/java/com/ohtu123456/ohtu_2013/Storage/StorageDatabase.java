@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.persistence.OptimisticLockException;
 
 /**
+ * Simple storage-class that saves references into a sqlite database
  *
  * @author Heikki Kalliokoski
  */
@@ -20,6 +21,12 @@ public class StorageDatabase implements StorageInterface {
     
     private EbeanServer server;
 
+    
+    /**
+     * Constructor which initializes database connection. 
+     *
+     * @param databaseFilePath      Path to database file
+     */
     public StorageDatabase(String databaseFilePath) {
         ServerConfig config = new ServerConfig();
         config.setName("referenceDatabase");
@@ -53,6 +60,14 @@ public class StorageDatabase implements StorageInterface {
         server = EbeanServerFactory.create(config);
     }
 
+    /**
+     * Simplest method to add a reference to the database. 
+     * Requires that reference contains type-key with corresponding, proper
+     * reference type.
+     *
+     * @param reference     Reference data to be added
+     * @throws Exception
+     */
     @Override
     public void addReference(Map<String, String> reference) throws Exception {
         if(reference.get("type").equals("article"))
@@ -65,6 +80,15 @@ public class StorageDatabase implements StorageInterface {
             throw new Exception("Unknown reference type.");
     }
     
+    
+    /**
+     * Another method to add a reference to the database.
+     * 
+     *
+     * @param type          Type of the reference
+     * @param reference     Reference data
+     * @throws Exception
+     */
     public void addReference(String type, Map<String, String> reference) throws Exception{
         if(type.equals("article"))
             addArticleReference(reference);
@@ -76,6 +100,12 @@ public class StorageDatabase implements StorageInterface {
             throw new Exception("Unknown reference type.");
     }
 
+    
+    /**
+     * Method to query all references in the database.
+     * 
+     * @return              List of all references in the database
+     */
     public List<Map<String, String>> getReferences() {
         List<Map<String, String>> references = new ArrayList<Map<String, String>>();
         

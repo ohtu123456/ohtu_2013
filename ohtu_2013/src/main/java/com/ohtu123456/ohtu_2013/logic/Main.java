@@ -8,7 +8,7 @@ public class Main {
 
     private static final ApplicationContext ctx = new FileSystemXmlApplicationContext("src/main/resources/spring-context.xml");
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         UI ui = ctx.getBean(UI.class);
         ui.initialize();

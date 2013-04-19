@@ -7,13 +7,13 @@ import java.util.Map;
 
 public interface LogicInterface {
 
-    public boolean addReference(Map<String, String> reference); 
+    public boolean addReference(Map<String, String> reference) throws Exception; 
 
     public String printBibTex(String id);
 
     public Map<String, String> printClear(String id);
 
-    public ArrayList<Map<String, String>> giveAllReferences();
+    public List<Map<String, String>> giveAllReferences();
 
     public boolean saveAllReferences();
 

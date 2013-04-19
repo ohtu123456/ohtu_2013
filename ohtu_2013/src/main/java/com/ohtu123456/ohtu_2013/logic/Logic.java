@@ -4,23 +4,23 @@ import java.util.ArrayList;
 import java.util.Map;
 import org.springframework.stereotype.Component;
 import com.ohtu123456.ohtu_2013.BibtextParser.BibtextParser;
-import com.ohtu123456.ohtu_2013.Storage.Storage;
+import com.ohtu123456.ohtu_2013.Storage.StorageDatabase;
 import java.util.LinkedList;
 import java.util.List;
 
 @Component
 public class Logic implements LogicInterface {
 
-    Storage storage;
+    StorageDatabase dbStorage;
     BibtextParser parser;
 
     public Logic() {
-        storage = new Storage();
+        dbStorage = new StorageDatabase("./testiTietokanta.sqlite");
         parser = new BibtextParser();
     }
 
-    public boolean addReference(Map<String, String> reference) {
-        storage.addReference(reference);
+    public boolean addReference(Map<String, String> reference) throws Exception {
+        dbStorage.addReference("article", reference);
         return true;
     }
 
@@ -33,8 +33,8 @@ public class Logic implements LogicInterface {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public ArrayList<Map<String, String>> giveAllReferences() {
-        return storage.getReferences();
+    public List<Map<String, String>> giveAllReferences() {
+        return dbStorage.getReferences();
     }
 
     public boolean saveAllReferences() {
@@ -57,7 +57,20 @@ public class Logic implements LogicInterface {
     public LinkedList<String> createNewReference(String type) {
         LinkedList<String> fields = new LinkedList<String>();
         fields.add("author");
+        fields.add("title");
         fields.add("year");
+        fields.add("publisher");
+        if(type.equals("article")){
+            fields.add("journal");
+            fields.add("volume");
+            fields.add("number");
+            fields.add("pages");
+            fields.add("address");
+        } else if(type.equals("inproceedings")){
+            fields.add("booktitle");
+            fields.add("pages");
+            fields.add("publisher");
+        }
         return fields;
     }
 

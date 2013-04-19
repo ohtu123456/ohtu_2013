@@ -57,7 +57,20 @@ public class Logic implements LogicInterface {
     public LinkedList<String> createNewReference(String type) {
         LinkedList<String> fields = new LinkedList<String>();
         fields.add("author");
+        fields.add("title");
         fields.add("year");
+        fields.add("publisher");
+        if(type.equals("article")){
+            fields.add("journal");
+            fields.add("volume");
+            fields.add("number");
+            fields.add("pages");
+            fields.add("address");
+        } else if(type.equals("inproceedings")){
+            fields.add("booktitle");
+            fields.add("pages");
+            fields.add("publisher");
+        }
         return fields;
     }
 

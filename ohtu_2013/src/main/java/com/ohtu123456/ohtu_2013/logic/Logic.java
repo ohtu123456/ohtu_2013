@@ -16,7 +16,7 @@ public class Logic implements LogicInterface {
     BibtextParser parser;
 
     public Logic() {
-        dbStorage = new StorageDatabase("./testiTietokanta.sqlite");
+        dbStorage = new StorageDatabase("./target/testiTietokanta.sqlite");
         parser = new BibtextParser();
     }
 

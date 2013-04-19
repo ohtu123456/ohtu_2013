@@ -21,7 +21,7 @@ public class Logic implements LogicInterface {
     }
 
     public boolean addReference(Map<String, String> reference) throws AttributeInUseException {
-        dbStorage.addReference("article", reference);
+        dbStorage.addReference(reference);
         return true;
     }
     

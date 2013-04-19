@@ -1,6 +1,10 @@
 package com.ohtu123456.ohtu_2013.UserInterface;
 
 import com.ohtu123456.ohtu_2013.logic.LogicInterface;
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Iterator;
@@ -8,8 +12,14 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+<<<<<<< HEAD
 import javax.naming.directory.AttributeInUseException;
+=======
+import java.util.logging.Level;
+import java.util.logging.Logger;
+>>>>>>> leqdevel
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -39,17 +49,49 @@ public class UI {
     //--------------------------
     private boolean saved;
     private ArrayList<String> possibleReferences;
+    private InputStream input;
+    private PrintStream output;
 
     public UI() {
     }
 
+<<<<<<< HEAD
     public void initialize(){
+=======
+    public UI(LogicInterface l) {
+        this.logic = l;
+    }
+
+    public void initialize() {
+        input = System.in;
+        output = System.out;
+>>>>>>> leqdevel
         saved = false;
-        scanner = new Scanner(System.in);
+        scanner = new Scanner(input);
         menu = getMenuOptions();
         parser = new BasicParser();
         help = new HelpFormatter();
-        start();
+    }
+
+    /**
+     * Testing method for easyb, enables hard-coding of user input
+     *
+     * @param input String containing user input, separated with \n
+     */
+    public void setInput(String userInput) {
+        scanner = new Scanner(new ByteArrayInputStream(userInput.getBytes()));
+    }
+
+    /**
+     * Set program to output to a file, so that easyB can check for program
+     * output
+     */
+    public void setOutput(String file) {
+        try {
+            output = new PrintStream(file);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(UI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void start(){
@@ -85,19 +127,19 @@ public class UI {
         return opt;
     }
 
-    public CommandLine getDialog(Options opt) {
+    private CommandLine getDialog(Options opt) {
         while (true) {
             help.printHelp(" ", opt, true);
-            String input = scanner.nextLine();
-            if (input.equals("")) {
+            String uinput = scanner.nextLine();
+            if (uinput.equals("")) {
                 getDialog(opt);
             }
-            String[] args = input.split(" ");
+            String[] args = uinput.split(" ");
             try {
                 CommandLine cmd = parser.parse(opt, args);
                 return cmd;
             } catch (ParseException e) {
-                System.out.println("Parsing caused exception: " + e.getMessage());
+                output.println("Parsing caused exception: " + e.getMessage());
             }
         }
     }
@@ -109,6 +151,14 @@ public class UI {
             addReference();
         } else if (cmd.hasOption("print")) {
             printAllReferences();
+        } else if (cmd.hasOption("save")) {
+            saved = logic.saveAllReferences();
+            if (saved) {
+                output.println("All references saved.");
+            } else {
+                output.println("Save failed.");
+            }
+            start();
         } else {
             start();
         }
@@ -118,9 +168,9 @@ public class UI {
         List<Map<String, String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> ref : allReferences) {
             for (String s : ref.keySet()) {
-                System.out.println(s + " - " + ref.get(s));
+                output.println(s + " - " + ref.get(s));
             }
-            System.out.println("-------------------");
+            output.println("-------------------");
         }
         String h=logic.printBibTex("");
         start();
@@ -147,23 +197,30 @@ public class UI {
 
     private void addReference(List<String> fields){
         LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
-        System.out.println("Please fill in the following fields.");
+        output.println("Please fill in the following fields.");
         for (int i = 0; i < fields.size();) {
-            String input;
-            System.out.println(fields.get(i) + ":");
-            input = scanner.nextLine();
-            if (logic.validateField(fields.get(i), input)) {
-                newReference.put(fields.get(i), input);
+            String uinput;
+            output.println(fields.get(i) + ":");
+            uinput = scanner.nextLine();
+            if (logic.validateField(fields.get(i), uinput)) {
+                newReference.put(fields.get(i), uinput);
                 i++;
             } else {
-                System.out.println("Invalid value.");
+                output.println("Invalid value.");
             }
         }
+<<<<<<< HEAD
         try{
             logic.addReference(newReference);
             System.out.println("New reference added");
         } catch (AttributeInUseException e){
             System.out.println("Couldn't add new reference");
+=======
+        if (logic.addReference(newReference)) {
+            output.println("New reference added");
+        } else {
+            output.println("Couldn't add new reference");
+>>>>>>> leqdevel
         }
         start();
     }
@@ -175,8 +232,8 @@ public class UI {
         if (!saved) {
             boolean success = logic.saveAllReferences();
             if (!success) {
-                System.out.println("Could not save references.");
-                System.out.println("quit anyway? (y/n)");
+                output.println("Could not save references.");
+                output.println("quit anyway? (y/n)");
                 try {
                     String answer = scanner.nextLine();
                     if (answer.equals("y")) {
@@ -187,11 +244,11 @@ public class UI {
                         throw new InputMismatchException("Invalid argument");
                     }
                 } catch (InputMismatchException e) {
-                    System.out.println(e.getMessage());
+                    output.println(e.getMessage());
                     quit();
                 }
             } else {
-                System.out.println("All references saved");
+                output.println("All references saved");
             }
         }
         System.exit(0);

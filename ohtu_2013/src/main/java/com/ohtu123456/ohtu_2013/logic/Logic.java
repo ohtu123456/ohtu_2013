@@ -76,7 +76,6 @@ public class Logic implements LogicInterface {
         } else if(type.equals("inproceedings")){
             fields.add("booktitle");
             fields.add("pages");
-            fields.add("publisher");
         }
         return fields;
     }

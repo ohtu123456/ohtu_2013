@@ -1,8 +1,7 @@
 package com.ohtu123456.ohtu_2013.UserInterface;
 
-import com.ohtu123456.ohtu_2013.logic.Logic;
+import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -28,7 +27,7 @@ import org.springframework.stereotype.Component;
 public class UI {
 
     @Autowired
-    private Logic logic;
+    private LogicInterface logic;
     //--------------------------
     private CommandLineParser parser;
     private Options menu;
@@ -39,10 +38,14 @@ public class UI {
     private ArrayList<String> possibleReferences;
 
     public UI() {
+        io = new ConsoleIO();
+    }
+    
+    public UI(IO io) {
+        this.io = io;
     }
 
     public void initialize() {
-        io = new ConsoleIO();
         menu = getMenuOptions();
         parser = new BasicParser();
         help = new HelpFormatter();
@@ -109,6 +112,9 @@ public class UI {
             System.exit(0);
         } else if (cmd.hasOption("add")) {
             if (initializeDatabase()) {
+                if (logic == null)  {
+                    System.out.println("noilogickg");
+                }
                 addReference();
             } else {
                 System.out.println("Database could not be created.");

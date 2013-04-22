@@ -9,18 +9,16 @@ import java.util.List;
  *
  * @author Heikki Kalliokoski
  */
-public class StubIO implements IO{
-    
+public class StubIO implements IO {
+
     private List<String> output;
     private List<String> input;
     private Iterator<String> outputIterator;
-    
-    public StubIO(String... args){
+
+    public StubIO(String... args) {
         output = new ArrayList<String>();
         input = new ArrayList<String>();
-        for(String arg: args){
-            output.add(arg);
-        }
+        output.addAll(Arrays.asList(args));
         outputIterator = output.iterator();
     }
 
@@ -31,5 +29,8 @@ public class StubIO implements IO{
     public String nextLine() {
         return outputIterator.next();
     }
-    
+
+    public ArrayList<String> getInput() {
+        return (ArrayList) input;
+    }
 }

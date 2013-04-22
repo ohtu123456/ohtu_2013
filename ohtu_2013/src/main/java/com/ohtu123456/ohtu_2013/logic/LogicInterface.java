@@ -29,4 +29,8 @@ public interface LogicInterface {
      * Validates reference fields asked from user, for example Year should be 4-digit integer
      */
     public boolean validateField(String name, Object value);
+    
+    public boolean databaseExists();
+    
+    public boolean initializeDatabase(String filename);
 }

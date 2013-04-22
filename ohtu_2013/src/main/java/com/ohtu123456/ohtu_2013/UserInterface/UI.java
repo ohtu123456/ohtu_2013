@@ -36,14 +36,12 @@ public class UI {
     private HelpFormatter help;
     private IO io;
     //--------------------------
-    private boolean saved;
     private ArrayList<String> possibleReferences;
 
     public UI() {
     }
 
-    public void initialize(){
-        saved = false;
+    public void initialize() {
         io = new ConsoleIO();
         menu = getMenuOptions();
         parser = new BasicParser();
@@ -51,7 +49,7 @@ public class UI {
         start();
     }
 
-    public void start(){
+    public void start() {
         if (menu == null) {
             menu = getMenuOptions();
         }
@@ -60,7 +58,6 @@ public class UI {
     }
 
     private Options getMenuOptions() {
-        //TODO: Lisättävä johonkin kohtin, ennen uusien viitteiden lisäämistä kysely, mihin tiedostoon tallennetaan
         Options opt = new Options();
         opt.addOption("add", false, "Add Reference.");
         opt.addOption("print", false, "Print all references.");
@@ -84,7 +81,13 @@ public class UI {
         return opt;
     }
 
-    public CommandLine getDialog(Options opt) {
+    /**
+     * Asks user for input based on given options
+     *
+     * @param opt possible user options
+     * @return the command line containing user set parameters
+     */
+    private CommandLine getDialog(Options opt) {
         while (true) {
             help.printHelp(" ", opt, true);
             String input = io.nextLine();
@@ -101,11 +104,16 @@ public class UI {
         }
     }
 
-    private void processMenuInput(CommandLine cmd){
+    private void processMenuInput(CommandLine cmd) {
         if (cmd.hasOption("quit")) {
-            quit();
+            System.exit(0);
         } else if (cmd.hasOption("add")) {
-            addReference();
+            if (initializeDatabase()) {
+                addReference();
+            } else {
+                System.out.println("Database could not be created.");
+                start();
+            }
         } else if (cmd.hasOption("print")) {
             printAllReferences();
         } else {
@@ -113,7 +121,15 @@ public class UI {
         }
     }
 
-    private void printAllReferences(){
+    private boolean initializeDatabase() {
+        if (logic.databaseExists()) {
+            return true;
+        }
+        System.out.println("No database exists. Give a new file name: ");
+        return logic.initializeDatabase(io.nextLine());
+    }
+
+    private void printAllReferences() {
         List<Map<String, String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> ref : allReferences) {
             for (String s : ref.keySet()) {
@@ -125,13 +141,13 @@ public class UI {
         start();
     }
 
-    private void addReference(){
+    private void addReference() {
         LinkedList<String> requiredFields = new LinkedList<String>();
         String referenceType = "";
         referenceOptions = getReferenceOptions();
         CommandLine cmd = getDialog(referenceOptions);
         if (cmd.hasOption("quit")) {
-            quit();
+            System.exit(0);
         } else if (cmd.hasOption("return")) {
             start();
         } else {
@@ -145,8 +161,8 @@ public class UI {
             addReference(referenceType, requiredFields);
         }
     }
-    
-    private void addReference(String type, List<String> fields){
+
+    private void addReference(String type, List<String> fields) {
         LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
         io.println("Please fill in the following fields.");
         for (int i = 0; i < fields.size();) {
@@ -160,17 +176,16 @@ public class UI {
                 io.println("Invalid value.");
             }
         }
-        try{
+        try {
             logic.addReference(type, newReference);
             io.println("New reference added");
-        } catch (AttributeInUseException e){
+        } catch (AttributeInUseException e) {
             io.println("Couldn't add new reference");
         }
         start();
     }
-   
 
-    private void addReference(List<String> fields){
+    private void addReference(List<String> fields) {
         LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
         io.println("Please fill in the following fields.");
         for (int i = 0; i < fields.size();) {
@@ -184,41 +199,12 @@ public class UI {
                 io.println("Invalid value.");
             }
         }
-        try{
+        try {
             logic.addReference(newReference);
             io.println("New reference added");
-        } catch (AttributeInUseException e){
-            io.println("Couldn't add new reference");
+        } catch (AttributeInUseException e) {
+            io.println("Couldn't add new reference, reason: " + e.getMessage());
         }
         start();
-    }
-
-    /**
-     * Quits and ensures that all changes are saved before doing so.
-     */
-    private void quit(){
-        if (!saved) {
-            boolean success = logic.saveAllReferences();
-            if (!success) {
-                io.println("Could not save references.");
-                io.println("quit anyway? (y/n)");
-                try {
-                    String answer = io.nextLine();
-                    if (answer.equals("y")) {
-                        System.exit(0);
-                    } else if (answer.equals("n")) {
-                        start();
-                    } else {
-                        throw new InputMismatchException("Invalid argument");
-                    }
-                } catch (InputMismatchException e) {
-                    io.println(e.getMessage());
-                    quit();
-                }
-            } else {
-                io.println("All references saved");
-            }
-        }
-        System.exit(0);
     }
 }

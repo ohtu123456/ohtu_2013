@@ -15,7 +15,6 @@ public class Logic implements LogicInterface {
     StorageDatabase dbStorage;
     BibtextParser parser;
     private final String dbPrefix = "./target/";
-    private final String dbSuffix = ".sqlite";
 
     public Logic() {
         parser = new BibtextParser();
@@ -90,7 +89,7 @@ public class Logic implements LogicInterface {
     }
 
     public boolean initializeDatabase(String filename) {
-        dbStorage = new StorageDatabase(dbPrefix + filename + dbSuffix);
+        dbStorage = new StorageDatabase(dbPrefix + filename + ".sqlite");
         return databaseExists();
     }
 }

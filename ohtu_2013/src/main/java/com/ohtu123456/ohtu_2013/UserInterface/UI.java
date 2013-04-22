@@ -1,5 +1,6 @@
 package com.ohtu123456.ohtu_2013.UserInterface;
 
+import com.ohtu123456.ohtu_2013.logic.Logic;
 import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,9 +41,11 @@ public class UI {
     public UI() {
         io = new ConsoleIO();
     }
-    
-    public UI(IO io) {
+
+    public UI(IO io, LogicInterface logic) {
         this.io = io;
+        this.logic = logic;
+        logic.initializeDatabase("testidb");
     }
 
     public void initialize() {
@@ -112,9 +115,6 @@ public class UI {
             System.exit(0);
         } else if (cmd.hasOption("add")) {
             if (initializeDatabase()) {
-                if (logic == null)  {
-                    System.out.println("noilogickg");
-                }
                 addReference();
             } else {
                 System.out.println("Database could not be created.");
@@ -136,6 +136,9 @@ public class UI {
     }
 
     private void printAllReferences() {
+        if (!logic.databaseExists()) {
+            initializeDatabase();
+        }
         List<Map<String, String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> ref : allReferences) {
             for (String s : ref.keySet()) {

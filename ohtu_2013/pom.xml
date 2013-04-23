@@ -48,7 +48,7 @@
                 <version>1.4</version>
                 <executions>
                     <execution>
-                        <phase>integration-test</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>test</goal>
                         </goals>
@@ -56,7 +56,7 @@
                 </executions>
                 <configuration>
                     <storyType>html</storyType>
-                    <storyReport>${basedir}/target/easyb/easyb-report.html
+                    <storyReport>${basedir}\target\easyb\easyb-report.html
                     </storyReport>
                 </configuration>
             </plugin>

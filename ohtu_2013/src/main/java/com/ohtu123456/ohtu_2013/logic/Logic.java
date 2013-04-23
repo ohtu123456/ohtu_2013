@@ -18,7 +18,7 @@ public class Logic implements LogicInterface {
     private final String dbPrefix = "./target/";
     private final String dbSuffix = ".sqlite";
 
-    public Logic() {
+    public Logic() throws InterruptedException {
         parser = new BibtextParser();
     }
 

@@ -1,6 +1,6 @@
 package com.ohtu123456.ohtu_2013.UserInterface;
 
-import com.ohtu123456.ohtu_2013.logic.Logic;
+import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,9 +20,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UI {
-
     @Autowired
-    private Logic logic;
+    private LogicInterface logic;
     //--------------------------
     @Autowired
     private MenuHandler menuHandler;
@@ -35,11 +34,18 @@ public class UI {
 
     public UI() {
         help = new HelpFormatter();
+        io = new ConsoleIO();
+    }
+
+    public UI(IO io, LogicInterface logic) {
+        this.io = io;
+        this.logic = logic;
+        menuHandler = new MenuHandler();
+        help = new HelpFormatter();
     }
 
     public void initialize() {
         possibleReferences = (ArrayList) logic.getReferenceTypes();
-        io = new ConsoleIO();
         menuHandler.populateMenuItems(possibleReferences);
         start();
     }
@@ -57,7 +63,7 @@ public class UI {
 
     private void processMainMenuInput(ArrayList<Selection> userInput) {
         if (!initializeDatabase()) {
-            System.out.println("Could not create database");
+            io.println("Could not create database");
             start();
         }
         for (Selection selection : userInput) {
@@ -111,7 +117,7 @@ public class UI {
                 }
                 return menuHandler.getUserInput(input, opt);
             } catch (ParseException ex) {
-                System.out.println("Parse exception: " + ex.getMessage());
+                io.println("Parse exception: " + ex.getMessage());
                 getDialog(opt);
             }
         }
@@ -121,7 +127,7 @@ public class UI {
         if (logic.databaseExists()) {
             return true;
         }
-        System.out.println("No database exists. Give a new file name: ");
+        io.println("No database exists. Give a new file name: ");
         return logic.initializeDatabase(io.nextLine());
     }
 
@@ -142,14 +148,14 @@ public class UI {
         for (String s : reference.keySet()) {
             io.println(s + " - " + reference.get(s));
         }
-        System.out.print("\nAs BibTex format: \n\n");
-        System.out.println(reference.get("bibtex"));
+        io.println("\nAs BibTex format: \n\n");
+        io.println(reference.get("bibtex"));
     }
 
     private void printFilters() {
-        System.out.println("Filters in use: ");
+        io.println("Filters in use: ");
         for (String filter : logic.getFilters()) {
-            System.out.println(filter);
+            io.println(filter);
         }
         start();
     }

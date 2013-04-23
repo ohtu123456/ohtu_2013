@@ -21,6 +21,9 @@ import javax.persistence.OptimisticLockException;
 public class StorageDatabase {
     
     private EbeanServer server;
+    private List<String> newFilters;
+    private List<String> oldFilters;
+    private List<Map<String, String>> filteredResults;
 
     
     /**
@@ -29,36 +32,10 @@ public class StorageDatabase {
      * @param databaseFilePath      Path to database file
      */
     public StorageDatabase(String databaseFilePath) {
-        ServerConfig config = new ServerConfig();
-        config.setName("referenceDatabase");
-
-        DataSourceConfig sqLite = new DataSourceConfig();
-        sqLite.setDriver("org.sqlite.JDBC");
-        sqLite.setUsername("");
-        sqLite.setPassword("");
-        sqLite.setUrl("jdbc:sqlite:" + databaseFilePath);
-        config.setDataSourceConfig(sqLite);
-        config.setDatabasePlatform(new SQLitePlatform());
-        config.getDataSourceConfig().setIsolationLevel(Transaction.READ_UNCOMMITTED);
-
-        config.setDefaultServer(false);
-        config.setRegister(false);
-
-        config.addClass(Article.class);
-        config.addClass(Inproceeding.class);
-        config.addClass(Book.class);
-        
-        File dbFile = new File(databaseFilePath);
-        if(!dbFile.exists()){
-            config.setDdlGenerate(true);
-            config.setDdlRun(true);
-        } else {
-            config.setDdlGenerate(false);
-            config.setDdlRun(false);
-        }
-        dbFile = null;
-
+        ServerConfig config = inintializeDatabaseConfig(databaseFilePath);
         server = EbeanServerFactory.create(config);
+        newFilters = new ArrayList<String>();
+        oldFilters = new ArrayList<String>();
     }
 
     /**
@@ -143,4 +120,82 @@ public class StorageDatabase {
         
         server.save(new Inproceeding(reference));
     }   
+
+    List<String> getFilters() {
+        ArrayList<String> allFilters = new ArrayList<String>();
+        allFilters.addAll(oldFilters);
+        allFilters.addAll(newFilters);
+        return allFilters;
+    }
+
+    private ServerConfig inintializeDatabaseConfig(String databaseFilePath) {
+        ServerConfig config = new ServerConfig();
+        config.setName("referenceDatabase");
+        DataSourceConfig sqLite = new DataSourceConfig();
+        sqLite.setDriver("org.sqlite.JDBC");
+        sqLite.setUsername("");
+        sqLite.setPassword("");
+        sqLite.setUrl("jdbc:sqlite:" + databaseFilePath);
+        config.setDataSourceConfig(sqLite);
+        config.setDatabasePlatform(new SQLitePlatform());
+        config.getDataSourceConfig().setIsolationLevel(Transaction.READ_UNCOMMITTED);
+        config.setDefaultServer(false);
+        config.setRegister(false);
+        config.addClass(Article.class);
+        config.addClass(Inproceeding.class);
+        config.addClass(Book.class);
+        File dbFile = new File(databaseFilePath);
+        if(!dbFile.exists()){
+            config.setDdlGenerate(true);
+            config.setDdlRun(true);
+        } else {
+            config.setDdlGenerate(false);
+            config.setDdlRun(false);
+        }
+        dbFile = null;
+        return config;
+    }
+
+    void addFilter(String filter) {
+        newFilters.add(filter);
+            
+    }
+
+    void cleanFilters() {
+        newFilters.clear();
+        oldFilters.clear();
+    }
+
+    List<Map<String, String>> getFiltered() {
+        if(filteredResults == null)
+            filteredResults = getReferences();
+        applyNewFilters();
+        return filteredResults;
+    }
+
+    private void applyNewFilters() {
+        for(String filter: newFilters){
+            applyFilter(filter);
+            oldFilters.add(filter);
+        }
+        newFilters.clear();
+    }
+    
+    private void applyFilter(String filter){
+        ArrayList<Map<String, String>> toBeRemoved = new ArrayList<Map<String, String>>();
+        for(Map<String, String> row: filteredResults){
+            if(!rowMatchesFilter(row, filter))
+                toBeRemoved.add(row);
+        }
+        filteredResults.removeAll(toBeRemoved);
+    }
+    
+    private boolean rowMatchesFilter(Map<String, String> row, String filter){
+        for(String value:row.values()){
+            if(value.contains(filter))
+                return true;
+        }
+        return false;
+    }
+
 }

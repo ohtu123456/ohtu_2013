@@ -9,6 +9,12 @@
 
     <name>ohtu_2013</name>
     <url>http://maven.apache.org</url>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <easyb.version>1.5</easyb.version>
+    </properties>
+    
     <build>
         <plugins>
             <plugin>
@@ -48,7 +54,7 @@
                 <version>1.4</version>
                 <executions>
                     <execution>
-                        <phase>test</phase>
+                        <phase>integration-test</phase>
                         <goals>
                             <goal>test</goal>
                         </goals>
@@ -62,10 +68,6 @@
             </plugin>
         </plugins>
     </build>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <easyb.version>1.5</easyb.version>
-    </properties>
 
     <dependencies>
         <dependency>

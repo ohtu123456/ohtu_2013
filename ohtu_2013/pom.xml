@@ -64,6 +64,7 @@
     </build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <easyb.version>1.5</easyb.version>
     </properties>
 
     <dependencies>
@@ -121,6 +122,13 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.7.2</version>
         </dependency>   
+        
+        <dependency>
+            <groupId>org.easyb</groupId>
+            <artifactId>easyb-core</artifactId>
+            <version>${easyb.version}</version>
+            <scope>test</scope>        
+        </dependency>
 
     </dependencies>
 </project>

@@ -70,9 +70,23 @@ public class UI {
             if (selection.getName().equals("print")) {
                 printAllReferences();
             }
+            if (selection.getName().equals("clearfilters")) {
+                logic.clearFilters();
+            }
+            if (selection.getName().equals("showfilters"))  {
+                printFilters();
+            }
         }
     }
 
+    private void printFilters() {
+        System.out.println("Filters in use: ");
+        for (String filter : logic.getFilters())    {
+            System.out.println(filter);
+        }
+        start();
+    }
+    
     private void processReferenceMenuInput(ArrayList<Selection> userInput) {
         for (Selection selection : userInput) {
             addReference(selection.getName(), logic.createNewReference(selection.getName()));

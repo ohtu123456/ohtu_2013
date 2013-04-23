@@ -15,10 +15,9 @@ import org.springframework.stereotype.Component;
  *
  * @author Leif
  */
-
 @Component
 public class MenuHandler {
-   
+
     private Options mainMenu;
     private Options referenceTypesMenu;
     private CommandLineParser parser;
@@ -33,6 +32,8 @@ public class MenuHandler {
         mainMenu = new Options();
         mainMenu.addOption("add", false, "Add Reference.");
         mainMenu.addOption("filter", true, "Add a search filter");
+        mainMenu.addOption("showfilters",false,"show set filters");
+        mainMenu.addOption("clearfilters",false,"remove all filters");
         mainMenu.addOption("print", false, "Print references according to given filters.");
         mainMenu.addOption("quit", false, "Quit program.");
         //--------------------------
@@ -71,6 +72,13 @@ public class MenuHandler {
         if (cmd.hasOption("add")) {
             userSelections.add(new Selection("add"));
             return userSelections;
+        }
+        if (cmd.hasOption("showfilters")) {
+            userSelections.add(new Selection("showfilters"));
+            return userSelections;
+        }
+        if (cmd.hasOption("clearfilters")) {
+            userSelections.add(new Selection("clearfilters"));
         }
         if (cmd.hasOption("filter")) {
             userSelections.add(new Selection("filter", cmd.getOptionValue("filter")));

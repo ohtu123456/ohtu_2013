@@ -121,7 +121,7 @@ public class StorageDatabase {
         server.save(new Inproceeding(reference));
     }   
 
-    List<String> getFilters() {
+    public List<String> getFilters() {
         ArrayList<String> allFilters = new ArrayList<String>();
         allFilters.addAll(oldFilters);
         allFilters.addAll(newFilters);
@@ -156,17 +156,17 @@ public class StorageDatabase {
         return config;
     }
 
-    void addFilter(String filter) {
+    public void addFilter(String filter) {
         newFilters.add(filter);
             
     }
 
-    void cleanFilters() {
+    public void cleanFilters() {
         newFilters.clear();
         oldFilters.clear();
     }
 
-    List<Map<String, String>> getFiltered() {
+    public List<Map<String, String>> getFiltered() {
         if(filteredResults == null)
             filteredResults = getReferences();
         applyNewFilters();

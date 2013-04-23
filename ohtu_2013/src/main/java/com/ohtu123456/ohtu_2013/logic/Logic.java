@@ -93,4 +93,16 @@ public class Logic implements LogicInterface {
         dbStorage = new StorageDatabase(dbPrefix + filename + dbSuffix);
         return databaseExists();
     }
+
+    public void addFilter(String filter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void clearFilters() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public ArrayList<String> getFilters() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -1,5 +1,6 @@
 package com.ohtu123456.ohtu_2013.logic;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -33,4 +34,10 @@ public interface LogicInterface {
     public boolean databaseExists();
     
     public boolean initializeDatabase(String filename);
+    
+    public void addFilter(String filter);
+    
+    public void clearFilters();
+    
+    public ArrayList<String> getFilters();
 }

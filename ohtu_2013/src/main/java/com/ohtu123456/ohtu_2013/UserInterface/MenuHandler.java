@@ -42,18 +42,21 @@ public class MenuHandler {
         referenceTypesMenu.addOption("menu", false, "Return to main menu");
         referenceTypesMenu.addOption("quit", false, "Quit program");
     }
-    
-    private void buildMainMenu()    {
+
+    private void buildMainMenu() {
         mainMenu = new Options();
-        Option add = new Option("add","Add Reference.");
-        Option print = new Option("print", "Print references.");
+        Option add = new Option("add", "Add Reference.");
         Option showfilters = new Option("showfilters", "Show set filters.");
         Option clearfilters = new Option("clearfilters", "Clear all filters.");
         Option quit = new Option("quit", "Quit program.");
+        Option print = OptionBuilder.withArgName("id")
+                .hasOptionalArg()
+                .withDescription("Print references, use specific id for detailed info.")
+                .create("print");
         Option filter = OptionBuilder.withArgName("filter")
-                                     .hasArg()
-                                     .withDescription("add a new filter")
-                                     .create("filter");
+                .hasArg()
+                .withDescription("add a new filter")
+                .create("filter");
         mainMenu.addOption(add);
         mainMenu.addOption(print);
         mainMenu.addOption(showfilters);
@@ -98,7 +101,12 @@ public class MenuHandler {
             userSelections.add(new Selection("filter", cmd.getOptionValue("filter")));
         }
         if (cmd.hasOption("print")) {
-            userSelections.add(new Selection("print"));
+            //Detailed print selected
+            if (cmd.getOptionValues("print") != null) {
+                userSelections.add(new Selection("print", cmd.getOptionValue("print")));
+            } else {
+                userSelections.add(new Selection("print"));
+            }
         }
         return userSelections;
     }

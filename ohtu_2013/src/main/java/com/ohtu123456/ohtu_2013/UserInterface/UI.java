@@ -48,7 +48,7 @@ public class UI {
         if (mainMenu == null) {
             mainMenu = menuHandler.getMainMenu();
         }
-        if (referenceMenu == null)  {
+        if (referenceMenu == null) {
             referenceMenu = menuHandler.getReferenceTypesMenu();
         }
         ArrayList<Selection> userInput = getDialog(mainMenu);
@@ -56,7 +56,7 @@ public class UI {
     }
 
     private void processMainMenuInput(ArrayList<Selection> userInput) {
-        if (!initializeDatabase())    {
+        if (!initializeDatabase()) {
             System.out.println("Could not create database");
             start();
         }
@@ -68,28 +68,28 @@ public class UI {
                 logic.addFilter(selection.getArgument());
             }
             if (selection.getName().equals("print")) {
-                printAllReferences();
+                if (selection.HasArgument()) {
+                    printDetailed(selection.getArgument());
+                } else {
+                    printAllReferences();
+                }
             }
             if (selection.getName().equals("clearfilters")) {
                 logic.clearFilters();
             }
-            if (selection.getName().equals("showfilters"))  {
+            if (selection.getName().equals("showfilters")) {
                 printFilters();
             }
         }
     }
 
-    private void printFilters() {
-        System.out.println("Filters in use: ");
-        for (String filter : logic.getFilters())    {
-            System.out.println(filter);
-        }
-        start();
-    }
-    
     private void processReferenceMenuInput(ArrayList<Selection> userInput) {
         for (Selection selection : userInput) {
-            addReference(selection.getName(), logic.createNewReference(selection.getName()));
+            if (selection.getName().equals("menu")) {
+                start();
+            } else {
+                addReference(selection.getName(), logic.createNewReference(selection.getName()));
+            }
         }
     }
 
@@ -103,7 +103,7 @@ public class UI {
     private ArrayList<Selection> getDialog(Options opt) {
         while (true) {
             try {
-                help.printHelp(" ", opt,false);
+                help.printHelp(" ", opt, false);
                 String input = io.nextLine();
                 //No input, print help again
                 if (input.equals("")) {
@@ -128,15 +128,39 @@ public class UI {
     private void printAllReferences() {
         List<Map<String, String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> ref : allReferences) {
-            for (String s : ref.keySet()) {
-                io.println(s + " - " + ref.get(s));
-            }
+            io.println("{ID: " + ref.get("id") + ", "
+                    + " AUTHOR: " + ref.get("author") + ", "
+                    + " TITLE: " + ref.get("title") + ", "
+                    + " YEAR: " + ref.get("year") + "}.");
             io.println("-------------------");
         }
-        //String h=logic.printBibTex("");
         start();
     }
 
+    private void printDetailed(String id) {
+        Map<String, String> reference = logic.giveReference(id);
+        for (String s : reference.keySet()) {
+            io.println(s + " - " + reference.get(s));
+        }
+        System.out.print("\nAs BibTex format: \n\n");
+        System.out.println(reference.get("bibtex"));
+    }
+
+    private void printFilters() {
+        System.out.println("Filters in use: ");
+        for (String filter : logic.getFilters()) {
+            System.out.println(filter);
+        }
+        start();
+    }
+
+    /**
+     * Asks the user for reference fields, validates them, and sends it to logic
+     * for storage
+     *
+     * @param type Reference type (article, book,...)
+     * @param fields Required fields for this type of reference
+     */
     private void addReference(String type, List<String> fields) {
         LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
         io.println("Please fill in the following fields.");

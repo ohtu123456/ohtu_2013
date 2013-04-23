@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 import com.ohtu123456.ohtu_2013.BibtextParser.BibtextParser;
 import com.ohtu123456.ohtu_2013.Storage.StorageDatabase;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import javax.naming.directory.AttributeInUseException;
@@ -104,5 +105,16 @@ public class Logic implements LogicInterface {
 
     public ArrayList<String> getFilters() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Map<String, String> giveReference(String id) {
+        //Map<String, String> reference = dbStorage.getReferences(id)
+        HashMap<String,String> testiReference = new HashMap<String, String>();
+        testiReference.put("id", "1255");
+        testiReference.put("author", "Not so good programmer");
+        testiReference.put("title","Codesmell");
+        String asBibTex = parser.convertToBibtext(testiReference);
+        testiReference.put("bibtex",asBibTex);
+        return testiReference;
     }
 }

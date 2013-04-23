@@ -15,6 +15,8 @@ public interface LogicInterface {
     public Map<String, String> printClear(String id);
 
     public List<Map<String, String>> giveAllReferences();
+    
+    public Map<String, String> giveReference(String id);
 
     public boolean saveAllReferences();
 

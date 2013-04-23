@@ -1,6 +1,5 @@
 package com.ohtu123456.ohtu_2013.logic;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -39,5 +38,5 @@ public interface LogicInterface {
     
     public void clearFilters();
     
-    public ArrayList<String> getFilters();
+    public List<String> getFilters();
 }

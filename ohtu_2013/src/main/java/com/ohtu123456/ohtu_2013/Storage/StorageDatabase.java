@@ -161,7 +161,7 @@ public class StorageDatabase {
             
     }
 
-    public void cleanFilters() {
+    public void clearFilters() {
         newFilters.clear();
         oldFilters.clear();
     }

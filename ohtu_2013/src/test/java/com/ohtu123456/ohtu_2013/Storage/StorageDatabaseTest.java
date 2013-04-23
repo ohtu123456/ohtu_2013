@@ -112,7 +112,7 @@ public class StorageDatabaseTest extends TestCase {
         storageDatabase = new StorageDatabase(testDatabasePath);
         String filter1 = "Science";
         storageDatabase.addFilter(filter1);
-        storageDatabase.cleanFilters();
+        storageDatabase.clearFilters();
         assertTrue(storageDatabase.getFilters().isEmpty());
     }
     

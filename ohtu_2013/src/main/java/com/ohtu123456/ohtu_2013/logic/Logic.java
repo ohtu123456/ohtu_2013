@@ -95,14 +95,14 @@ public class Logic implements LogicInterface {
     }
 
     public void addFilter(String filter) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        dbStorage.addFilter(filter);
     }
 
     public void clearFilters() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        dbStorage.clearFilters();
     }
 
-    public ArrayList<String> getFilters() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<String> getFilters() {
+        return dbStorage.getFilters();
     }
 }

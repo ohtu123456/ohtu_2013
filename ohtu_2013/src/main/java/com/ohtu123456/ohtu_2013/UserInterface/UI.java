@@ -103,7 +103,7 @@ public class UI {
     private ArrayList<Selection> getDialog(Options opt) {
         while (true) {
             try {
-                help.printHelp(" ", opt, true);
+                help.printHelp(" ", opt,false);
                 String input = io.nextLine();
                 //No input, print help again
                 if (input.equals("")) {

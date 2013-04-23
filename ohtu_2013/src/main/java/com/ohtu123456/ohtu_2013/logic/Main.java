@@ -6,11 +6,10 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class Main {
 
-    private static final ApplicationContext ctx = new FileSystemXmlApplicationContext("src/main/resources/spring-context.xml");
 
     public static void main(String[] args) throws Exception {
 
-        UI ui = ctx.getBean(UI.class);
+        UI ui = new UI();
         ui.initialize();
         ui.start();
     }

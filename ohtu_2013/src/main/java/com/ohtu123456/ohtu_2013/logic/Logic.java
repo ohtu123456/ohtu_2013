@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.naming.directory.AttributeInUseException;
 
-@Component
 public class Logic implements LogicInterface {
 
     StorageDatabase dbStorage;

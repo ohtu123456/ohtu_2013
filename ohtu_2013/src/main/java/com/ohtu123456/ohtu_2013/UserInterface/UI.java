@@ -24,10 +24,8 @@ import org.springframework.stereotype.Component;
  *
  * @author Leif Setälä
  */
-@Component
 public class UI {
 
-    @Autowired
     private LogicInterface logic;
     //--------------------------
     private CommandLineParser parser;

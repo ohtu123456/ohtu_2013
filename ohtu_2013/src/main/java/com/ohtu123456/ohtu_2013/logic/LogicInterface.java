@@ -8,12 +8,16 @@ import javax.naming.directory.AttributeInUseException;
 public interface LogicInterface {
 
     public boolean addReference(Map<String, String> reference) throws AttributeInUseException; 
+    
+    public boolean addReference(String type, Map<String,String> reference) throws AttributeInUseException;
 
     public String printBibTex(String id);
 
     public Map<String, String> printClear(String id);
 
     public List<Map<String, String>> giveAllReferences();
+    
+    public Map<String, String> giveReference(String id);
 
     public boolean saveAllReferences();
 

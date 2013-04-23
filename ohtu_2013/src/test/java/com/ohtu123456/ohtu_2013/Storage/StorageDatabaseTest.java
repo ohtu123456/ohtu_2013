@@ -48,7 +48,7 @@ public class StorageDatabaseTest extends TestCase {
         if(dbFile.exists())
             dbFile.delete();
     }
-    
+
     public void testAfterInitDatabaseFileExists(){
         storageDatabase = new StorageDatabase(testDatabasePath);
         File databaseFile = new File(testDatabasePath);

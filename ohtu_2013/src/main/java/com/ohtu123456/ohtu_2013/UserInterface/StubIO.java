@@ -27,6 +27,10 @@ public class StubIO implements IO{
     public void println(String line) {
         input.add(line);
     }
+    
+    public List<String> getInput()  {
+        return input;
+    }
 
     public String nextLine() {
         return outputIterator.next();

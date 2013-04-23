@@ -6,6 +6,7 @@ import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.springframework.stereotype.Component;
@@ -29,13 +30,7 @@ public class MenuHandler {
     }
 
     public void populateMenuItems(ArrayList<String> refTypes) {
-        mainMenu = new Options();
-        mainMenu.addOption("add", false, "Add Reference.");
-        mainMenu.addOption("filter", true, "Add a search filter");
-        mainMenu.addOption("showfilters",false,"show set filters");
-        mainMenu.addOption("clearfilters",false,"remove all filters");
-        mainMenu.addOption("print", false, "Print references according to given filters.");
-        mainMenu.addOption("quit", false, "Quit program.");
+        buildMainMenu();
         //--------------------------
         referenceTypesMenu = new Options();
         referenceTypes = refTypes;
@@ -46,6 +41,28 @@ public class MenuHandler {
         }
         referenceTypesMenu.addOption("menu", false, "Return to main menu");
         referenceTypesMenu.addOption("quit", false, "Quit program");
+    }
+
+    private void buildMainMenu() {
+        mainMenu = new Options();
+        Option add = new Option("add", "Add Reference.");
+        Option showfilters = new Option("showfilters", "Show set filters.");
+        Option clearfilters = new Option("clearfilters", "Clear all filters.");
+        Option quit = new Option("quit", "Quit program.");
+        Option print = OptionBuilder.withArgName("id")
+                .hasOptionalArg()
+                .withDescription("Print references, use specific id for detailed info.")
+                .create("print");
+        Option filter = OptionBuilder.withArgName("filter")
+                .hasArg()
+                .withDescription("add a new filter")
+                .create("filter");
+        mainMenu.addOption(add);
+        mainMenu.addOption(print);
+        mainMenu.addOption(showfilters);
+        mainMenu.addOption(clearfilters);
+        mainMenu.addOption(filter);
+        mainMenu.addOption(quit);
     }
 
     public ArrayList<Selection> getUserInput(String input, Options options) throws ParseException {
@@ -84,7 +101,12 @@ public class MenuHandler {
             userSelections.add(new Selection("filter", cmd.getOptionValue("filter")));
         }
         if (cmd.hasOption("print")) {
-            userSelections.add(new Selection("print"));
+            //Detailed print selected
+            if (cmd.getOptionValues("print") != null) {
+                userSelections.add(new Selection("print", cmd.getOptionValue("print")));
+            } else {
+                userSelections.add(new Selection("print"));
+            }
         }
         return userSelections;
     }

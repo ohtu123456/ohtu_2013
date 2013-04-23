@@ -14,9 +14,10 @@ public class Logic implements LogicInterface {
 
     StorageDatabase dbStorage;
     BibtextParser parser;
+    private final String dbPrefix = "./target/";
+    private final String dbSuffix = ".sqlite";
 
     public Logic() {
-        dbStorage = new StorageDatabase("./target/testiTietokanta.sqlite");
         parser = new BibtextParser();
     }
 
@@ -82,5 +83,26 @@ public class Logic implements LogicInterface {
 
     public boolean validateField(String name, Object value) {
         return true;
+    }
+
+    public boolean databaseExists() {
+        return (dbStorage != null);
+    }
+
+    public boolean initializeDatabase(String filename) {
+        dbStorage = new StorageDatabase(dbPrefix + filename + dbSuffix);
+        return databaseExists();
+    }
+
+    public void addFilter(String filter) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void clearFilters() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public ArrayList<String> getFilters() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

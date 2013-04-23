@@ -2,16 +2,10 @@ package com.ohtu123456.ohtu_2013.UserInterface;
 
 import com.ohtu123456.ohtu_2013.logic.Logic;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import javax.naming.directory.AttributeInUseException;
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
@@ -30,90 +24,108 @@ public class UI {
     @Autowired
     private Logic logic;
     //--------------------------
-    private CommandLineParser parser;
-    private Options menu;
-    private Options referenceOptions;
+    @Autowired
+    private MenuHandler menuHandler;
+    private Options mainMenu;
+    private Options referenceMenu;
     private HelpFormatter help;
     private IO io;
     //--------------------------
-    private boolean saved;
     private ArrayList<String> possibleReferences;
 
     public UI() {
+        help = new HelpFormatter();
     }
 
-    public void initialize(){
-        saved = false;
+    public void initialize() {
+        possibleReferences = (ArrayList) logic.getReferenceTypes();
         io = new ConsoleIO();
-        menu = getMenuOptions();
-        parser = new BasicParser();
-        help = new HelpFormatter();
+        menuHandler.populateMenuItems(possibleReferences);
         start();
     }
 
-    public void start(){
-        if (menu == null) {
-            menu = getMenuOptions();
+    public void start() {
+        if (mainMenu == null) {
+            mainMenu = menuHandler.getMainMenu();
         }
-        CommandLine cmd = getDialog(menu);
-        processMenuInput(cmd);
+        if (referenceMenu == null)  {
+            referenceMenu = menuHandler.getReferenceTypesMenu();
+        }
+        ArrayList<Selection> userInput = getDialog(mainMenu);
+        processMainMenuInput(userInput);
     }
 
-    private Options getMenuOptions() {
-        //TODO: Lisättävä johonkin kohtin, ennen uusien viitteiden lisäämistä kysely, mihin tiedostoon tallennetaan
-        Options opt = new Options();
-        opt.addOption("add", false, "Add Reference.");
-        opt.addOption("print", false, "Print all references.");
-        opt.addOption("save", false, "Save all references.");
-        opt.addOption("quit", false, "Quit program.");
-        return opt;
-    }
-
-    private Options getReferenceOptions() {
-        if (referenceOptions == null) {
-            possibleReferences = (ArrayList) logic.getReferenceTypes();
-        }
-        Options opt = new Options();
-        Iterator<String> it = possibleReferences.iterator();
-        while (it.hasNext()) {
-            String ref = it.next();
-            opt.addOption(ref, false, "Add reference of type: " + ref);
-        }
-        opt.addOption("menu", false, "Return to main menu");
-        opt.addOption("quit", false, "Quit program");
-        return opt;
-    }
-
-    public CommandLine getDialog(Options opt) {
-        while (true) {
-            help.printHelp(" ", opt, true);
-            String input = io.nextLine();
-            if (input.equals("")) {
-                getDialog(opt);
-            }
-            String[] args = input.split(" ");
-            try {
-                CommandLine cmd = parser.parse(opt, args);
-                return cmd;
-            } catch (ParseException e) {
-                io.println("Parsing caused exception: " + e.getMessage());
-            }
-        }
-    }
-
-    private void processMenuInput(CommandLine cmd){
-        if (cmd.hasOption("quit")) {
-            quit();
-        } else if (cmd.hasOption("add")) {
-            addReference();
-        } else if (cmd.hasOption("print")) {
-            printAllReferences();
-        } else {
+    private void processMainMenuInput(ArrayList<Selection> userInput) {
+        if (!initializeDatabase())    {
+            System.out.println("Could not create database");
             start();
         }
+        for (Selection selection : userInput) {
+            if (selection.getName().equals("add")) {
+                processReferenceMenuInput(getDialog(referenceMenu));
+            }
+            if (selection.getName().equals("filter")) {
+                logic.addFilter(selection.getArgument());
+            }
+            if (selection.getName().equals("print")) {
+                printAllReferences();
+            }
+            if (selection.getName().equals("clearfilters")) {
+                logic.clearFilters();
+            }
+            if (selection.getName().equals("showfilters"))  {
+                printFilters();
+            }
+        }
     }
 
-    private void printAllReferences(){
+    private void printFilters() {
+        System.out.println("Filters in use: ");
+        for (String filter : logic.getFilters())    {
+            System.out.println(filter);
+        }
+        start();
+    }
+    
+    private void processReferenceMenuInput(ArrayList<Selection> userInput) {
+        for (Selection selection : userInput) {
+            addReference(selection.getName(), logic.createNewReference(selection.getName()));
+        }
+    }
+
+    /**
+     * Asks user for input based on given options and sends them to MenuHandler
+     * for processing
+     *
+     * @param opt possible user options
+     * @return an ArrayList containing user selections
+     */
+    private ArrayList<Selection> getDialog(Options opt) {
+        while (true) {
+            try {
+                help.printHelp(" ", opt, true);
+                String input = io.nextLine();
+                //No input, print help again
+                if (input.equals("")) {
+                    getDialog(opt);
+                }
+                return menuHandler.getUserInput(input, opt);
+            } catch (ParseException ex) {
+                System.out.println("Parse exception: " + ex.getMessage());
+                getDialog(opt);
+            }
+        }
+    }
+
+    private boolean initializeDatabase() {
+        if (logic.databaseExists()) {
+            return true;
+        }
+        System.out.println("No database exists. Give a new file name: ");
+        return logic.initializeDatabase(io.nextLine());
+    }
+
+    private void printAllReferences() {
         List<Map<String, String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> ref : allReferences) {
             for (String s : ref.keySet()) {
@@ -125,28 +137,7 @@ public class UI {
         start();
     }
 
-    private void addReference(){
-        LinkedList<String> requiredFields = new LinkedList<String>();
-        String referenceType = "";
-        referenceOptions = getReferenceOptions();
-        CommandLine cmd = getDialog(referenceOptions);
-        if (cmd.hasOption("quit")) {
-            quit();
-        } else if (cmd.hasOption("return")) {
-            start();
-        } else {
-            for (String s : possibleReferences) {
-                if (cmd.hasOption(s)) {
-                    requiredFields = logic.createNewReference(s);
-                    referenceType = s;
-                    break;
-                }
-            }
-            addReference(referenceType, requiredFields);
-        }
-    }
-    
-    private void addReference(String type, List<String> fields){
+    private void addReference(String type, List<String> fields) {
         LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
         io.println("Please fill in the following fields.");
         for (int i = 0; i < fields.size();) {
@@ -160,65 +151,12 @@ public class UI {
                 io.println("Invalid value.");
             }
         }
-        try{
+        try {
             logic.addReference(type, newReference);
             io.println("New reference added");
-        } catch (AttributeInUseException e){
-            io.println("Couldn't add new reference");
+        } catch (AttributeInUseException e) {
+            io.println("Couldn't add new reference: " + e.getMessage());
         }
         start();
-    }
-   
-
-    private void addReference(List<String> fields){
-        LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
-        io.println("Please fill in the following fields.");
-        for (int i = 0; i < fields.size();) {
-            String input;
-            io.println(fields.get(i) + ":");
-            input = io.nextLine();
-            if (logic.validateField(fields.get(i), input)) {
-                newReference.put(fields.get(i), input);
-                i++;
-            } else {
-                io.println("Invalid value.");
-            }
-        }
-        try{
-            logic.addReference(newReference);
-            io.println("New reference added");
-        } catch (AttributeInUseException e){
-            io.println("Couldn't add new reference");
-        }
-        start();
-    }
-
-    /**
-     * Quits and ensures that all changes are saved before doing so.
-     */
-    private void quit(){
-        if (!saved) {
-            boolean success = logic.saveAllReferences();
-            if (!success) {
-                io.println("Could not save references.");
-                io.println("quit anyway? (y/n)");
-                try {
-                    String answer = io.nextLine();
-                    if (answer.equals("y")) {
-                        System.exit(0);
-                    } else if (answer.equals("n")) {
-                        start();
-                    } else {
-                        throw new InputMismatchException("Invalid argument");
-                    }
-                } catch (InputMismatchException e) {
-                    io.println(e.getMessage());
-                    quit();
-                }
-            } else {
-                io.println("All references saved");
-            }
-        }
-        System.exit(0);
     }
 }

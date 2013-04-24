@@ -20,6 +20,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UI {
+
     @Autowired
     private LogicInterface logic;
     //--------------------------
@@ -31,6 +32,7 @@ public class UI {
     private IO io;
     //--------------------------
     private ArrayList<String> possibleReferences;
+    private boolean exit; //boolen for user input 'quit'
 
     public UI() {
         help = new HelpFormatter();
@@ -45,8 +47,10 @@ public class UI {
     }
 
     public void initialize() {
+        exit = false;
         possibleReferences = (ArrayList) logic.getReferenceTypes();
         menuHandler.populateMenuItems(possibleReferences);
+        initializeDatabase();
         start();
     }
 
@@ -58,44 +62,35 @@ public class UI {
             referenceMenu = menuHandler.getReferenceTypesMenu();
         }
         ArrayList<Selection> userInput = getDialog(mainMenu);
-        processMainMenuInput(userInput);
+        processMenuInput(userInput);
     }
 
-    private void processMainMenuInput(ArrayList<Selection> userInput) {
-        if (!initializeDatabase()) {
-            io.println("Could not create database");
-            start();
-        }
+    private void processMenuInput(ArrayList<Selection> userInput) {
         for (Selection selection : userInput) {
-            if (selection.getName().equals("add")) {
-                processReferenceMenuInput(getDialog(referenceMenu));
-            }
-            if (selection.getName().equals("filter")) {
+            if (selection.getName().equals("quit")) {
+                exit = true;//Just break from execution loop, System.exit caused too weird testing errors
+            } else if (selection.getName().equals("menu")) {
+                start();
+            } else if (selection.getName().equals("add")) {
+                processMenuInput(getDialog(referenceMenu));
+            } else if (selection.getName().equals("clearfilters")) {
+                logic.clearFilters();
+            } else if (selection.getName().equals("filter")) {
                 logic.addFilter(selection.getArgument());
-            }
-            if (selection.getName().equals("print")) {
+            } else if (selection.getName().equals("showfilters")) {
+                printFilters();
+            } else if (selection.getName().equals("print")) {
                 if (selection.HasArgument()) {
                     printDetailed(selection.getArgument());
                 } else {
                     printAllReferences();
                 }
-            }
-            if (selection.getName().equals("clearfilters")) {
-                logic.clearFilters();
-            }
-            if (selection.getName().equals("showfilters")) {
-                printFilters();
-            }
-        }
-    }
-
-    private void processReferenceMenuInput(ArrayList<Selection> userInput) {
-        for (Selection selection : userInput) {
-            if (selection.getName().equals("menu")) {
-                start();
-            } else {
+            } else {//Input was selectin a reference type
                 addReference(selection.getName(), logic.createNewReference(selection.getName()));
             }
+        }
+        if (!exit) {
+            start();
         }
     }
 
@@ -127,7 +122,7 @@ public class UI {
         if (logic.databaseExists()) {
             return true;
         }
-        io.println("No database exists. Give a new file name: ");
+        io.println("No open database connection. Give the name of the database: ");
         return logic.initializeDatabase(io.nextLine());
     }
 
@@ -187,6 +182,5 @@ public class UI {
         } catch (AttributeInUseException e) {
             io.println("Couldn't add new reference: " + e.getMessage());
         }
-        start();
     }
 }

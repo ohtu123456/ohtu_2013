@@ -12,6 +12,5 @@ public class Main {
 
         UI ui = ctx.getBean(UI.class);
         ui.initialize();
-        ui.start();
     }
 }

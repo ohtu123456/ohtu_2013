@@ -68,37 +68,33 @@ public class MenuHandler {
     public ArrayList<Selection> getUserInput(String input, Options options) throws ParseException {
         String[] args = input.split(" ");
         CommandLine cmd = parser.parse(options, args);
-        ArrayList<Selection> userInput;
-
-        String mainOptions = "addfilterprintquit";
-        //Contains main menu selections
-        userSelections = new ArrayList<Selection>();
-        if (mainOptions.contains(cmd.getOptions()[0].getOpt())) {
-            userInput = processMainMenuInput(cmd);
-        } else {
-            userInput = processReferenceTypesInput(cmd);
-        }
-
-        return userInput;
+        return processMenuInput(cmd);
     }
 
-    private ArrayList<Selection> processMainMenuInput(CommandLine cmd) {
+    private ArrayList<Selection> processMenuInput(CommandLine cmd) {
+        userSelections = new ArrayList<Selection>();
+        //First the quit and add commands, which will execute immediately, ignoring other selected options
         if (cmd.hasOption("quit")) {
-            System.exit(0);
+            userSelections.add(new Selection("quit"));
+            return userSelections;
+        }
+        if (cmd.hasOption("menu")) {
+            userSelections.add(new Selection("menu"));
+            return userSelections;
         }
         if (cmd.hasOption("add")) {
             userSelections.add(new Selection("add"));
             return userSelections;
         }
-        if (cmd.hasOption("showfilters")) {
-            userSelections.add(new Selection("showfilters"));
-            return userSelections;
-        }
+        //Then commands that can be used together
         if (cmd.hasOption("clearfilters")) {
             userSelections.add(new Selection("clearfilters"));
         }
         if (cmd.hasOption("filter")) {
             userSelections.add(new Selection("filter", cmd.getOptionValue("filter")));
+        }
+        if (cmd.hasOption("showfilters")) {
+            userSelections.add(new Selection("showfilters"));
         }
         if (cmd.hasOption("print")) {
             //Detailed print selected
@@ -108,12 +104,11 @@ public class MenuHandler {
                 userSelections.add(new Selection("print"));
             }
         }
-        return userSelections;
-    }
-
-    private ArrayList<Selection> processReferenceTypesInput(CommandLine cmd) {
-        for (Option opt : cmd.getOptions()) {
-            userSelections.add(new Selection(opt.getOpt()));
+        //Then reference types
+        for (String s : referenceTypes)   {
+            if (cmd.hasOption(s))   {
+                userSelections.add(new Selection(s));
+            }
         }
         return userSelections;
     }

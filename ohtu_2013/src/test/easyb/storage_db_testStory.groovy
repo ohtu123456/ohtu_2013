@@ -1,27 +1,11 @@
 import com.ohtu123456.ohtu_2013.Storage.*
 import com.ohtu123456.ohtu_2013.UserInterface.*
 import com.ohtu123456.ohtu_2013.logic.*
+import com.ohtu123456.ohtu_2013.Storage.*
 
-scenario "test",    {
-    given "a database", {
-        db = new StorageDatabase("testidb");
-    }
-
-    when "adding an article", {
-        map = new HashMap<String, String>();
-        map.put("author", "pekka");
-        db.addReference("article", map);
-    }
-
-    then "it should not be empty",   {
-        db.getReferences().size.shouldNotBe 0
-    }
-} 
-
-
-scenario "test",    {
+scenario "user adds a new book reference",    {
     given "a new program instance", {
-        userInput = "-add testidatabase -book a b c d c -quit".split();
+        userInput = "testidatabase -add -book a b c d c -quit".split();
         stubio = new StubIO(userInput)
         logic = new Logic();
         ui = new UI(stubio,logic);

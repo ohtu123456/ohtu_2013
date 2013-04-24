@@ -150,22 +150,26 @@ public class UI {
     private void printAllReferences() {
         List<Map<String, String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> ref : allReferences) {
-            io.println("{ID: " + ref.get("id") + ", "
-                    + " AUTHOR: " + ref.get("author") + ", "
-                    + " TITLE: " + ref.get("title") + ", "
-                    + " YEAR: " + ref.get("year") + "}.");
-            io.println("-------------------");
+           String tulos= logic.convertToBibtext(ref);
+            //       io.println("{ID: " + ref.get("id") + ", "
+     //               + " AUTHOR: " + ref.get("author") + ", "
+     //               + " TITLE: " + ref.get("title") + ", "
+     //               + " YEAR: " + ref.get("year") + "}.");
+            System.out.println(tulos);
+           io.println("-------------------");
         }
         start();
     }
 
     private void printDetailed(String id) {
         Map<String, String> reference = logic.giveReference(id);
-        for (String s : reference.keySet()) {
-            io.println(s + " - " + reference.get(s));
-        }
-        io.println("\nAs BibTex format: \n\n");
-        io.println(reference.get("bibtex"));
+        
+        String bib=logic.printBibTex(reference);
+        //for (String s : reference.keySet()) {
+        //    io.println(s + " - " + reference.get(s));
+        //}
+        //io.println("\nAs BibTex format: \n\n");
+        io.println(bib);
     }
 
     private void printFilters() {

@@ -24,6 +24,7 @@ public class Logic implements LogicInterface {
 
     /**
      * Constructor for testing purposes.
+     *
      * @param db injected db
      */
     public Logic(StorageDatabase db) {
@@ -41,12 +42,19 @@ public class Logic implements LogicInterface {
         return true;
     }
 
-    public String printBibTex(String id) {
-        String g = parser.tulostaBibTex(id);
-        return g;
+    public String printBibTex(Map<String, String> reference) {
+        String paluu="";
+        paluu=parser.printBibTex(reference);
+        return paluu;
     }
 
-    public Map<String, String> printClear(String id) {
+    public String convertToBibtext(Map<String, String> reference) {
+       String paluu="";
+       paluu=parser.convertToBibtext(reference);
+       return paluu;
+    }
+
+    public String printClear(Map<String, String> reference) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -4,6 +4,8 @@
  */
 package com.ohtu123456.ohtu_2013.BibtextParser;
 
+import java.util.HashMap;
+import java.util.Map;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import junit.framework.Test;
@@ -14,18 +16,19 @@ import junit.framework.TestCase;
  * @author sikuutti
  */
 public class BibtextParserTest extends TestCase {
-    
+
     public BibtextParserTest(String testName) {
         super(testName);
     }
     BibtextParser bib;
+
     @Override
     protected void setUp() throws Exception {
-      
-        this.bib=new BibtextParser(); 
+
+        this.bib = new BibtextParser();
         super.setUp();
     }
-    
+
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
@@ -33,17 +36,57 @@ public class BibtextParserTest extends TestCase {
     // TODO add test methods here. The name must begin with 'test'. For example:
     // public void testHello() {}
 
-public void testAakkoset(){
-    String testi="ä";
-    String testi1="Ä";
-    
-    assertEquals("{ä}",bib.korjaa_Aakkoset(testi));
-    assertEquals("{Ä}",bib.korjaa_Aakkoset(testi1));
+    public void testAakkoset() {
+        String testi = "ä";
+        String testi1 = "Ä";
 
-}
-public void testtulostaBibTex (){
-    
-    assertNotSame("",bib.tulostaBibTex("ww"));
-}
+        assertEquals("{ä}", bib.korjaa_Aakkoset(testi));
+        assertEquals("{Ä}", bib.korjaa_Aakkoset(testi1));
 
+    }
+
+    public void testTulostaBibTex() {
+        String paluu = "@book{1255,\n"
+                + "author = {Not so good programmer},\n"
+                + "title = {Codesmell},\n"
+                + "}";
+
+        Map<String, String> k = new HashMap();
+        k.put("type", "book");
+        k.put("id", "1255");
+        k.put("author", "Not so good programmer");
+        k.put("title", "Codesmell");
+
+        assertEquals(paluu, bib.convertToBibtext(k));
+    }
+
+    public void printClear() {
+        String paluu = "Type = book\n"
+                + "Author = Not so good programmer\n"
+                + "Title = Codesmell\n"
+                + "Year = null\n"
+                + "Publisher = null";
+
+        Map<String, String> k = new HashMap();
+        k.put("type", "book");
+        k.put("id", "1255");
+        k.put("author", "Not so good programmer");
+        k.put("title", "Codesmell");
+
+        assertEquals(paluu, bib.printClear(k));
+    }
+    
+    public void printBibTex() {
+        String paluu="Author = Not so good programmer\n" +
+"Title = Codesmell\n" +
+"Year = null";
+
+        Map<String, String> k = new HashMap();
+        k.put("type", "book");
+        k.put("id", "1255");
+        k.put("author", "Not so good programmer");
+        k.put("title", "Codesmell");
+
+        assertEquals(paluu, bib.printClear(k));
+    }
 }

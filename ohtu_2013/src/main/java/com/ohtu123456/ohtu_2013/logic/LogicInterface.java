@@ -11,11 +11,13 @@ public interface LogicInterface {
     
     public boolean addReference(String type, Map<String,String> reference) throws AttributeInUseException;
 
-    public String printBibTex(String id);
+    public String printBibTex(Map<String, String> reference);
 
-    public Map<String, String> printClear(String id);
+    public String printClear(Map<String, String> reference);
 
     public List<Map<String, String>> giveAllReferences();
+    
+    public String convertToBibtext(Map<String, String> reference);
     
     public Map<String, String> giveReference(String id);
 

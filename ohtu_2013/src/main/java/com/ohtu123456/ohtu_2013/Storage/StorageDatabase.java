@@ -19,17 +19,16 @@ import javax.persistence.OptimisticLockException;
  * @author Heikki Kalliokoski
  */
 public class StorageDatabase {
-    
+
     private EbeanServer server;
     private List<String> newFilters;
     private List<String> oldFilters;
     private List<Map<String, String>> filteredResults;
 
-    
     /**
-     * Constructor which initializes database connection. 
+     * Constructor which initializes database connection.
      *
-     * @param databaseFilePath      Path to database file
+     * @param databaseFilePath Path to database file
      */
     public StorageDatabase(String databaseFilePath) {
         ServerConfig config = inintializeDatabaseConfig(databaseFilePath);
@@ -39,87 +38,107 @@ public class StorageDatabase {
     }
 
     /**
-     * Simplest method to add a reference to the database. 
-     * Requires that reference contains type-key with corresponding, proper
-     * reference type.
+     * Alternative constructor for testing purposes, always creates a new database
+     * 
+     * @param databaseFilePath Path to database file
+     * @param testdb value is irrelevant. Giving this parameter invokes this constructor
+     */
+    public StorageDatabase(String databaseFilePath, boolean testdb) {
+        ServerConfig config = inintializeDatabaseConfig("./target/" + databaseFilePath);
+        config.setDdlGenerate(true);
+        config.setDdlRun(true);
+        server = EbeanServerFactory.create(config);
+        newFilters = new ArrayList<String>();
+        oldFilters = new ArrayList<String>();
+    }
+
+    /**
+     * Simplest method to add a reference to the database. Requires that
+     * reference contains type-key with corresponding, proper reference type.
      *
-     * @param reference     Reference data to be added
+     * @param reference Reference data to be added
      * @throws Exception
      */
     public void addReference(Map<String, String> reference) throws AttributeInUseException {
-        if(reference.get("type").equals("article"))
+        if (reference.get("type").equals("article")) {
             addArticleReference(reference);
-         else if(reference.get("type").equals("book"))
+        } else if (reference.get("type").equals("book")) {
             addBookReference(reference);
-         else if(reference.get("type").equals("inproceeding"))
+        } else if (reference.get("type").equals("inproceeding")) {
             addInproceedingReference(reference);
-    }
-    
-    
-    /**
-     * Another method to add a reference to the database.
-     * 
-     *
-     * @param type          Type of the reference
-     * @param reference     Reference data
-     * @throws Exception
-     */
-    public void addReference(String type, Map<String, String> reference) throws AttributeInUseException{
-        if(type.equals("article"))
-            addArticleReference(reference);
-        else if(type.equals("book"))
-            addBookReference(reference);
-        else if(type.equals("inproceedings"))
-            addInproceedingReference(reference);
+        }
     }
 
-    
+    /**
+     * Another method to add a reference to the database.
+     *
+     *
+     * @param type Type of the reference
+     * @param reference Reference data
+     * @throws Exception
+     */
+    public void addReference(String type, Map<String, String> reference) throws AttributeInUseException {
+        if (type.equals("article")) {
+            addArticleReference(reference);
+        } else if (type.equals("book")) {
+            addBookReference(reference);
+        } else if (type.equals("inproceedings")) {
+            addInproceedingReference(reference);
+        }
+    }
+
     /**
      * Method to query all references in the database.
-     * 
-     * @return              List of all references in the database
+     *
+     * @return List of all references in the database
      */
     public List<Map<String, String>> getReferences() {
         List<Map<String, String>> references = new ArrayList<Map<String, String>>();
-        
+
         List<Article> articles = server.find(Article.class).findList();
-        for(Article article: articles)
+        for (Article article : articles) {
             references.add(article.getReference());
-        
+        }
+
         List<Book> books = server.find(Book.class).findList();
-        for(Book book: books)
+        for (Book book : books) {
             references.add(book.getReference());
-        
+        }
+
         List<Inproceeding> inproceedings = server.find(Inproceeding.class).findList();
-        for(Inproceeding inproceeding: inproceedings)
+        for (Inproceeding inproceeding : inproceedings) {
             references.add(inproceeding.getReference());
-        
+        }
+
         return references;
     }
 
     private void addArticleReference(Map<String, String> reference) throws OptimisticLockException, AttributeInUseException {
         Article exists = server.find(Article.class).where().like("shortId", reference.get("id")).findUnique();
-        if(exists != null)
+        if (exists != null) {
             throw new AttributeInUseException("Reference exists already.");
-        
+        }
+
         server.save(new Article(reference));
     }
 
     private void addBookReference(Map<String, String> reference) throws AttributeInUseException, OptimisticLockException {
         Book exists = server.find(Book.class).where().like("shortId", reference.get("id")).findUnique();
-        if(exists != null)
+        if (exists != null) {
             throw new AttributeInUseException("Reference exists already.");
-        
+        }
+
         server.save(new Book(reference));
     }
 
     private void addInproceedingReference(Map<String, String> reference) throws OptimisticLockException, AttributeInUseException {
         Inproceeding exists = server.find(Inproceeding.class).where().like("shortId", reference.get("id")).findUnique();
-        if(exists != null)
+        if (exists != null) {
             throw new AttributeInUseException("Reference exists already.");
-        
+        }
+
         server.save(new Inproceeding(reference));
-    }   
+    }
 
     public List<String> getFilters() {
         ArrayList<String> allFilters = new ArrayList<String>();
@@ -145,7 +164,7 @@ public class StorageDatabase {
         config.addClass(Inproceeding.class);
         config.addClass(Book.class);
         File dbFile = new File(databaseFilePath);
-        if(!dbFile.exists()){
+        if (!dbFile.exists()) {
             config.setDdlGenerate(true);
             config.setDdlRun(true);
         } else {
@@ -158,7 +177,7 @@ public class StorageDatabase {
 
     public void addFilter(String filter) {
         newFilters.add(filter);
-            
+
     }
 
     public void clearFilters() {
@@ -167,35 +186,37 @@ public class StorageDatabase {
     }
 
     public List<Map<String, String>> getFiltered() {
-        if(filteredResults == null)
+        if (filteredResults == null) {
             filteredResults = getReferences();
+        }
         applyNewFilters();
         return filteredResults;
     }
 
     private void applyNewFilters() {
-        for(String filter: newFilters){
+        for (String filter : newFilters) {
             applyFilter(filter);
             oldFilters.add(filter);
         }
         newFilters.clear();
     }
-    
-    private void applyFilter(String filter){
+
+    private void applyFilter(String filter) {
         ArrayList<Map<String, String>> toBeRemoved = new ArrayList<Map<String, String>>();
-        for(Map<String, String> row: filteredResults){
-            if(!rowMatchesFilter(row, filter))
+        for (Map<String, String> row : filteredResults) {
+            if (!rowMatchesFilter(row, filter)) {
                 toBeRemoved.add(row);
+            }
         }
         filteredResults.removeAll(toBeRemoved);
     }
-    
-    private boolean rowMatchesFilter(Map<String, String> row, String filter){
-        for(String value:row.values()){
-            if(value.contains(filter))
+
+    private boolean rowMatchesFilter(Map<String, String> row, String filter) {
+        for (String value : row.values()) {
+            if (value.contains(filter)) {
                 return true;
+            }
         }
         return false;
     }
-
 }

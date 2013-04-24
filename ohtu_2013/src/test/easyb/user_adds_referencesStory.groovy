@@ -5,9 +5,10 @@ import com.ohtu123456.ohtu_2013.Storage.*
 
 scenario "user adds a new book reference",    {
     given "a new program instance", {
-        userInput = "testidatabase -add -book a b c d c -quit".split();
+        userInput = "-add -book a b c d c -quit".split();
         stubio = new StubIO(userInput)
-        logic = new Logic();
+        db = new StorageDatabase("testidatabase", true);
+        logic = new Logic(db);
         ui = new UI(stubio,logic);
     }
 

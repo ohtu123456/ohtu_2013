@@ -118,12 +118,33 @@ public class UI {
         }
     }
 
-    private boolean initializeDatabase() {
-        if (logic.databaseExists()) {
-            return true;
+    /**
+     * Asks the user for reference fields, validates them, and sends it to logic
+     * for storage
+     *
+     * @param type Reference type (article, book,...)
+     * @param fields Required fields for this type of reference
+     */
+    private void addReference(String type, List<String> fields) {
+        LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
+        io.println("Please fill in the following fields.");
+        for (int i = 0; i < fields.size();) {
+            String input;
+            io.println(fields.get(i) + ":");
+            input = io.nextLine();
+            if (logic.validateField(fields.get(i), input)) {
+                newReference.put(fields.get(i), input);
+                i++;
+            } else {
+                io.println("Invalid value.");
+            }
         }
-        io.println("No open database connection. Give the name of the database: ");
-        return logic.initializeDatabase(io.nextLine());
+        try {
+            logic.addReference(type, newReference);
+            io.println("New reference added");
+        } catch (AttributeInUseException e) {
+            io.println("Couldn't add new reference: " + e.getMessage());
+        }
     }
 
     private void printAllReferences() {
@@ -154,33 +175,12 @@ public class UI {
         }
         start();
     }
-
-    /**
-     * Asks the user for reference fields, validates them, and sends it to logic
-     * for storage
-     *
-     * @param type Reference type (article, book,...)
-     * @param fields Required fields for this type of reference
-     */
-    private void addReference(String type, List<String> fields) {
-        LinkedHashMap<String, String> newReference = new LinkedHashMap<String, String>();
-        io.println("Please fill in the following fields.");
-        for (int i = 0; i < fields.size();) {
-            String input;
-            io.println(fields.get(i) + ":");
-            input = io.nextLine();
-            if (logic.validateField(fields.get(i), input)) {
-                newReference.put(fields.get(i), input);
-                i++;
-            } else {
-                io.println("Invalid value.");
-            }
+    
+        private boolean initializeDatabase() {
+        if (logic.databaseExists()) {
+            return true;
         }
-        try {
-            logic.addReference(type, newReference);
-            io.println("New reference added");
-        } catch (AttributeInUseException e) {
-            io.println("Couldn't add new reference: " + e.getMessage());
-        }
+        io.println("No open database connection. Give the name of the database: ");
+        return logic.initializeDatabase(io.nextLine());
     }
 }

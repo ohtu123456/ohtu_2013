@@ -18,16 +18,25 @@ public class Logic implements LogicInterface {
     private final String dbPrefix = "./target/";
     private final String dbSuffix = ".sqlite";
 
-    public Logic() throws InterruptedException {
+    public Logic() {
         parser = new BibtextParser();
+    }
+
+    /**
+     * Constructor for testing purposes.
+     * @param db injected db
+     */
+    public Logic(StorageDatabase db) {
+        parser = new BibtextParser();
+        dbStorage = db;
     }
 
     public boolean addReference(Map<String, String> reference) throws AttributeInUseException {
         dbStorage.addReference(reference);
         return true;
     }
-    
-    public boolean addReference(String type, Map<String, String> reference) throws AttributeInUseException{
+
+    public boolean addReference(String type, Map<String, String> reference) throws AttributeInUseException {
         dbStorage.addReference(type, reference);
         return true;
     }
@@ -69,13 +78,13 @@ public class Logic implements LogicInterface {
         fields.add("title");
         fields.add("year");
         fields.add("publisher");
-        if(type.equals("article")){
+        if (type.equals("article")) {
             fields.add("journal");
             fields.add("volume");
             fields.add("number");
             fields.add("pages");
             fields.add("address");
-        } else if(type.equals("inproceedings")){
+        } else if (type.equals("inproceedings")) {
             fields.add("booktitle");
             fields.add("pages");
         }
@@ -109,12 +118,12 @@ public class Logic implements LogicInterface {
 
     public Map<String, String> giveReference(String id) {
         //Map<String, String> reference = dbStorage.getReferences(id)
-        HashMap<String,String> testiReference = new HashMap<String, String>();
+        HashMap<String, String> testiReference = new HashMap<String, String>();
         testiReference.put("id", "1255");
         testiReference.put("author", "Not so good programmer");
-        testiReference.put("title","Codesmell");
+        testiReference.put("title", "Codesmell");
         String asBibTex = parser.convertToBibtext(testiReference);
-        testiReference.put("bibtex",asBibTex);
+        testiReference.put("bibtex", asBibTex);
         return testiReference;
     }
 }

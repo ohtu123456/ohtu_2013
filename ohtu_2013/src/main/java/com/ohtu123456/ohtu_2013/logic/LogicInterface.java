@@ -20,9 +20,7 @@ public interface LogicInterface {
     public String convertToBibtext(Map<String, String> reference);
     
     public Map<String, String> giveReference(String id);
-
-    public boolean saveAllReferences();
-
+    
     public List<String> getReferenceTypes();
 
     /*

@@ -15,19 +15,39 @@ import javax.persistence.OptimisticLockException;
  */
 public class BibtextParser {
 
+    
     /*
      * sisääntulo yksi HashMap 
      * kutsutaan ui:sta jokailelle referenssille erokseen
      * 
      * ulos Bibtex muotoinen string
      */
-  
+    public  String getType(Map<String, String> reference) {
+        String paluu = "";
+        System.out.println(reference.size());
+        if (reference.size() == 5) {
+            paluu = "book";
+        }
 
-    public String convertToBibtext(Map<String, String> reference) {
+        if (reference.size() == 8) {
+            paluu = "inproceedings";
+        }
+
+        if (reference.size() == 10) {
+            paluu = "article";
+        }
+
+        return paluu;
+
+    }
+
+    public  String convertToBibtext(Map<String, String> reference) {
 
         String paluu = "";
 
-        paluu = "@" + reference.get("type") + "{" + reference.get("id") + ",\n";
+        String tyyppi = getType(reference);
+
+        paluu = "@" + tyyppi + "{" + reference.get("id") + ",\n";
         reference.remove("type");
         reference.remove("id");
         for (Map.Entry<String, String> entry : reference.entrySet()) {
@@ -38,7 +58,7 @@ public class BibtextParser {
 
         }
         paluu += "}";
-        System.out.println(paluu);
+
 
 
 
@@ -73,10 +93,10 @@ public class BibtextParser {
      * Kenttien nimet otettu logic new reference 
      * ulos ihmiskielinen string
      */
-    public String printClear(Map<String, String> reference) {
-
+    public  String printClear(Map<String, String> reference) {
+        String tyyppi = getType(reference);
         String paluu = "";
-        String type = reference.get("type") + "\n";
+        String type = tyyppi + "\n";
         paluu += "Type = " + reference.get("type") + "\n";
         paluu += "Author = " + reference.get("author") + "\n";
         paluu += "Title = " + reference.get("title") + "\n";

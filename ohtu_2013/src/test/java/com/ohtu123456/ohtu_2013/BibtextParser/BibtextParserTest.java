@@ -46,47 +46,67 @@ public class BibtextParserTest extends TestCase {
     }
 
     public void testTulostaBibTex() {
-        String paluu = "@book{1255,\n"
-                + "author = {Not so good programmer},\n"
-                + "title = {Codesmell},\n"
-                + "}";
+        String paluu = "@book{SOMEBOOK1,\n" +
+"author = {Maija Mallikas},\n" +
+"title = {Maijan opas matematiikkaan},\n" +
+"year = {2013},\n" +
+"publisher = {AlmaMedia},\n" +
+"}";
 
-        Map<String, String> k = new HashMap();
-        k.put("type", "book");
-        k.put("id", "1255");
-        k.put("author", "Not so good programmer");
-        k.put("title", "Codesmell");
+        
+      Map<String, String> reference = new HashMap();
+        
+        reference.put("id", "SOMEBOOK1");
+        reference.put("author", "Maija Mallikas");
+        reference.put("title", "Maijan opas matematiikkaan");
+        reference.put("year", "2013");
+        reference.put("publisher", "AlmaMedia");
 
-        assertEquals(paluu, bib.convertToBibtext(k));
+        assertEquals(paluu, bib.convertToBibtext(reference));
     }
 
     public void printClear() {
-        String paluu = "Type = book\n"
-                + "Author = Not so good programmer\n"
-                + "Title = Codesmell\n"
-                + "Year = null\n"
-                + "Publisher = null";
+        String paluu ="Type = null\n" +
+"Author = Maija Mallikas\n" +
+"Title = Maijan opas matematiikkaan\n" +
+"Year = 2013\n" +
+"Publisher = AlmaMedia";
 
-        Map<String, String> k = new HashMap();
-        k.put("type", "book");
-        k.put("id", "1255");
-        k.put("author", "Not so good programmer");
-        k.put("title", "Codesmell");
+        Map<String, String> reference = new HashMap();
+        
+        reference.put("id", "SOMEBOOK1");
+        reference.put("author", "Maija Mallikas");
+        reference.put("title", "Maijan opas matematiikkaan");
+        reference.put("year", "2013");
+        reference.put("publisher", "AlmaMedia");
 
-        assertEquals(paluu, bib.printClear(k));
+
+        assertEquals(paluu, bib.printClear(reference));
     }
-    
+
     public void printBibTex() {
-        String paluu="Author = Not so good programmer\n" +
-"Title = Codesmell\n" +
-"Year = null";
+        String paluu = "Author = Maija Mallikas\n" +
+"Title = Maijan opas matematiikkaan\n" +
+"Year = 2013";
 
-        Map<String, String> k = new HashMap();
-        k.put("type", "book");
-        k.put("id", "1255");
-        k.put("author", "Not so good programmer");
-        k.put("title", "Codesmell");
+        Map<String, String> reference = new HashMap();
+        reference.put("id", "SOMEBOOK1");
+        reference.put("author", "Maija Mallikas");
+        reference.put("title", "Maijan opas matematiikkaan");
+        reference.put("year", "2013");
+        reference.put("publisher", "AlmaMedia");
 
-        assertEquals(paluu, bib.printClear(k));
+        assertEquals(paluu, bib.printClear(reference));
+    }
+
+    public void testType() {
+        Map<String, String> reference = new HashMap();
+        reference.put("id", "SOMEBOOK1");
+        reference.put("author", "Maija Mallikas");
+        reference.put("title", "Maijan opas matematiikkaan");
+        reference.put("year", "2013");
+        reference.put("publisher", "AlmaMedia");
+
+        assertEquals("book", bib.getType(reference));
     }
 }

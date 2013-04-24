@@ -175,8 +175,8 @@ public class UI {
         }
         start();
     }
-    
-        private boolean initializeDatabase() {
+
+    private boolean initializeDatabase() {
         if (logic.databaseExists()) {
             return true;
         }

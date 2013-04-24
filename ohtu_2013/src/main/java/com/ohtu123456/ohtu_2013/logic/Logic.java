@@ -24,6 +24,7 @@ public class Logic implements LogicInterface {
 
     /**
      * Constructor for testing purposes.
+     *
      * @param db injected db
      */
     public Logic(StorageDatabase db) {

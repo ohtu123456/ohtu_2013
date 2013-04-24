@@ -18,9 +18,7 @@ public interface LogicInterface {
     public List<Map<String, String>> giveAllReferences();
     
     public Map<String, String> giveReference(String id);
-
-    public boolean saveAllReferences();
-
+    
     public List<String> getReferenceTypes();
 
     /*

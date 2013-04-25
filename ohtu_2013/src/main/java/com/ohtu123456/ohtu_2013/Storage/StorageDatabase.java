@@ -44,7 +44,7 @@ public class StorageDatabase {
      * @param testdb value is irrelevant. Giving this parameter invokes this constructor
      */
     public StorageDatabase(String databaseFilePath, boolean testdb) {
-        ServerConfig config = inintializeDatabaseConfig("./target/" + databaseFilePath);
+        ServerConfig config = inintializeDatabaseConfig("target/" + databaseFilePath);
         config.setDdlGenerate(true);
         config.setDdlRun(true);
         server = EbeanServerFactory.create(config);

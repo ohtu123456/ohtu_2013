@@ -14,22 +14,16 @@ import java.util.Map;
  */
 public class BibtextParser {
 
-    LogicInterface logic;
     /*
      * sisääntulo yksi HashMap 
      * kutsutaan ui:sta jokailelle referenssille erokseen
      * 
      * ulos Bibtex muotoinen string
      */
-
     public BibtextParser() {
     }
 
-    public BibtextParser(LogicInterface logic) {
-        this.logic = logic;
-    }
-
-    public  String getType(Map<String, String> reference) {
+    public String getType(Map<String, String> reference) {
         String paluu = "";
 
         if (reference.size() == 5) {
@@ -48,7 +42,7 @@ public class BibtextParser {
 
     }
 
-    public  String convertToBibtext(Map<String, String> reference) {
+    public String convertToBibtext(Map<String, String> reference) {
 
         String paluu = "";
 
@@ -74,7 +68,7 @@ public class BibtextParser {
         return paluu;
     }
 
-    public  String convertToBibtextPrintAll(Map<String, String> reference) {
+    public String convertToBibtextPrintAll(Map<String, String> reference) {
 
         String paluu = "";
 
@@ -86,7 +80,7 @@ public class BibtextParser {
         for (Map.Entry<String, String> entry : reference.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            paluu += "\t"+key + " = {" + value + "},\n";
+            paluu += "\t" + key + " = {" + value + "},\n";
 
 
         }
@@ -105,7 +99,7 @@ public class BibtextParser {
      * 
      */
 
-    public  String korjaa_Aakkoset(String sana) {
+    public String korjaa_Aakkoset(String sana) {
 
         sana = sana.replaceAll("ä", "{ä}");
         sana = sana.replaceAll("Ä", "{Ä}");
@@ -183,7 +177,7 @@ public class BibtextParser {
         FileWriter fstream = new FileWriter(filename, true);
         BufferedWriter out = new BufferedWriter(fstream);
         for (Map<String, String> ref : k) {
-            out.write(convertToBibtextPrintAll(ref)+"\n");
+            out.write(convertToBibtextPrintAll(ref) + "\n");
         }
         out.close();
 
@@ -191,5 +185,4 @@ public class BibtextParser {
 
 
     }
-    
 }

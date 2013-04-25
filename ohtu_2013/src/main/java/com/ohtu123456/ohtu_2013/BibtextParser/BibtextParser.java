@@ -1,5 +1,10 @@
 package com.ohtu123456.ohtu_2013.BibtextParser;
 
+import com.ohtu123456.ohtu_2013.logic.LogicInterface;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -8,15 +13,24 @@ import java.util.Map;
  */
 public class BibtextParser {
 
+    LogicInterface logic;
     /*
      * sisääntulo yksi HashMap 
      * kutsutaan ui:sta jokailelle referenssille erokseen
      * 
      * ulos Bibtex muotoinen string
      */
+
+    public BibtextParser() {
+    }
+
+    public BibtextParser(LogicInterface logic) {
+        this.logic = logic;
+    }
+
     public String getType(Map<String, String> reference) {
         String paluu = "";
-        System.out.println(reference.size());
+
         if (reference.size() == 5) {
             paluu = "book";
         }
@@ -46,6 +60,32 @@ public class BibtextParser {
             String key = entry.getKey();
             String value = entry.getValue();
             paluu += key + " = {" + value + "},";
+
+
+        }
+        paluu += "}";
+
+
+
+
+        paluu = korjaa_Aakkoset(paluu);
+
+        return paluu;
+    }
+
+    public String convertToBibtextPrintAll(Map<String, String> reference) {
+
+        String paluu = "";
+
+        String tyyppi = getType(reference);
+
+        paluu = "@" + tyyppi + "{" + reference.get("id") + ",\n";
+        reference.remove("type");
+        reference.remove("id");
+        for (Map.Entry<String, String> entry : reference.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+            paluu += "\t"+key + " = {" + value + "},\n";
 
 
         }
@@ -126,5 +166,28 @@ public class BibtextParser {
                 + "TITLE: " + reference.get("title") + ", "
                 + "YEAR: " + reference.get("year") + "}";
         return paluu;
+    }
+
+    public void saveAsBibTex(String filename, List d) throws java.io.IOException {
+
+        List<Map<String, String>> k = d;
+        File f1 = new File(filename);
+
+        if (f1.exists()) {
+            f1.delete();
+        }
+
+
+
+        FileWriter fstream = new FileWriter(filename, true);
+        BufferedWriter out = new BufferedWriter(fstream);
+        for (Map<String, String> ref : k) {
+            out.write(convertToBibtextPrintAll(ref)+"\n");
+        }
+        out.close();
+
+
+
+
     }
 }

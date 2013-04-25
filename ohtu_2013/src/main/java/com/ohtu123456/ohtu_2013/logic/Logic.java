@@ -5,9 +5,12 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 import com.ohtu123456.ohtu_2013.BibtextParser.BibtextParser;
 import com.ohtu123456.ohtu_2013.Storage.StorageDatabase;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.directory.AttributeInUseException;
 
 @Component
@@ -131,7 +134,7 @@ public class Logic implements LogicInterface {
      * @return the whole reference as a map, with an additional bibtex field added to it
      */
     public Map<String, String> giveReference(String id) {
-        //Map<String, String> reference = dbStorage.getReferences(id)
+       // Map<String, String> reference = dbStorage.getReferences(id)
         HashMap<String, String> testiReference = new HashMap<String, String>();
         testiReference.put("id", "1255");
         testiReference.put("author", "Not so good programmer");
@@ -142,7 +145,12 @@ public class Logic implements LogicInterface {
     }
 
     public void saveAsBibTex(String filename) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Map<String, String>> all=dbStorage.getReferences();
+        try {
+            parser.saveAsBibTex( filename,all);
+        } catch (IOException ex) {
+            Logger.getLogger(Logic.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public List<Map<String, String>> giveFilteredReferences() {

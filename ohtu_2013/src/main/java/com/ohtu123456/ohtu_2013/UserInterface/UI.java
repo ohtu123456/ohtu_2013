@@ -155,7 +155,7 @@ public class UI {
      //               + " AUTHOR: " + ref.get("author") + ", "
      //               + " TITLE: " + ref.get("title") + ", "
      //               + " YEAR: " + ref.get("year") + "}.");
-            System.out.println(tulos);
+            io.println(tulos);
            io.println("-------------------");
         }
         start();

@@ -47,7 +47,7 @@ public class BibtextParser {
 
         String tyyppi = getType(reference);
 
-        paluu = "@" + tyyppi + "{" + reference.get("id") + ",\n";
+        paluu = "@" + tyyppi + "{" + reference.get("id") + ",";
         reference.remove("type");
         reference.remove("id");
         for (Map.Entry<String, String> entry : reference.entrySet()) {

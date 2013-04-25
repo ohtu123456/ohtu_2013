@@ -150,15 +150,9 @@ public class UI {
     }
 
     private void printAllReferences() {
-        List<Map<String, String>> allReferences = logic.giveAllReferences();
+        List<Map<String, String>> allReferences = logic.giveFilteredReferences();
         for (Map<String, String> ref : allReferences) {
-            String tulos = logic.convertToBibtext(ref);
-            //       io.println("{ID: " + ref.get("id") + ", "
-            //               + " AUTHOR: " + ref.get("author") + ", "
-            //               + " TITLE: " + ref.get("title") + ", "
-            //               + " YEAR: " + ref.get("year") + "}.");
-            io.println(tulos);
-            io.println("-------------------");
+            io.println(logic.printBibTex(ref));
         }
         start();
     }

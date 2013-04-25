@@ -124,6 +124,12 @@ public class Logic implements LogicInterface {
         return dbStorage.getFilters();
     }
 
+    /**
+     * This should give the one reference identified by ID, a bibtex format is added to it and then printed as a detailed print of 
+     * a single reference
+     * @param id unique id of the reference
+     * @return the whole reference as a map, with an additional bibtex field added to it
+     */
     public Map<String, String> giveReference(String id) {
         //Map<String, String> reference = dbStorage.getReferences(id)
         HashMap<String, String> testiReference = new HashMap<String, String>();
@@ -137,5 +143,9 @@ public class Logic implements LogicInterface {
 
     public void saveAsBibTex(String filename) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<Map<String, String>> giveFilteredReferences() {
+        return dbStorage.getFiltered();
     }
 }

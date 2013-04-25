@@ -1,13 +1,6 @@
 package com.ohtu123456.ohtu_2013.BibtextParser;
 
-import com.ohtu123456.ohtu_2013.Storage.*;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import javax.naming.directory.AttributeInUseException;
-import javax.persistence.OptimisticLockException;
 
 /**
  *
@@ -15,14 +8,13 @@ import javax.persistence.OptimisticLockException;
  */
 public class BibtextParser {
 
-    
     /*
      * sisääntulo yksi HashMap 
      * kutsutaan ui:sta jokailelle referenssille erokseen
      * 
      * ulos Bibtex muotoinen string
      */
-    public  String getType(Map<String, String> reference) {
+    public String getType(Map<String, String> reference) {
         String paluu = "";
         System.out.println(reference.size());
         if (reference.size() == 5) {
@@ -41,7 +33,7 @@ public class BibtextParser {
 
     }
 
-    public  String convertToBibtext(Map<String, String> reference) {
+    public String convertToBibtext(Map<String, String> reference) {
 
         String paluu = "";
 
@@ -72,7 +64,7 @@ public class BibtextParser {
      * 
      */
 
-    public  String korjaa_Aakkoset(String sana) {
+    public String korjaa_Aakkoset(String sana) {
 
         sana = sana.replaceAll("ä", "{ä}");
         sana = sana.replaceAll("Ä", "{Ä}");
@@ -93,7 +85,7 @@ public class BibtextParser {
      * Kenttien nimet otettu logic new reference 
      * ulos ihmiskielinen string
      */
-    public  String printClear(Map<String, String> reference) {
+    public String printClear(Map<String, String> reference) {
         String tyyppi = getType(reference);
         String paluu = "";
         String type = tyyppi + "\n";
@@ -126,13 +118,13 @@ public class BibtextParser {
      * palauttaa String 
      */
 
-    public  String printBibTex(Map<String, String> reference) {
+    public String printBibTex(Map<String, String> reference) {
         String paluu = "";
 
-        paluu += "Author = " + reference.get("author") + "\n";
-        paluu += "Title = " + reference.get("title") + "\n";
-        paluu += "Year = " + reference.get("year") + "\n";
-        paluu = korjaa_Aakkoset(paluu);
+        paluu += "{ID: " + reference.get("id") + ", "
+                + "AUTHOR: " + reference.get("author") + ", "
+                + "TITLE: " + reference.get("title") + ", "
+                + "YEAR: " + reference.get("year") + "}";
         return paluu;
     }
 }

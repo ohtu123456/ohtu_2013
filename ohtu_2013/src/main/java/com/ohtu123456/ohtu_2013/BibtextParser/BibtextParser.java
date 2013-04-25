@@ -53,7 +53,7 @@ public class BibtextParser {
         for (Map.Entry<String, String> entry : reference.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
-            paluu += key + " = {" + value + "},\n";
+            paluu += key + " = {" + value + "},";
 
 
         }

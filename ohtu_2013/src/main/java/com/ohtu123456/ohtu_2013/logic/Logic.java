@@ -134,4 +134,8 @@ public class Logic implements LogicInterface {
         testiReference.put("bibtex", asBibTex);
         return testiReference;
     }
+
+    public void saveAsBibTex(String filename) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

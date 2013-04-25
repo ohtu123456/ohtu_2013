@@ -17,6 +17,8 @@ public interface LogicInterface {
 
     public List<Map<String, String>> giveAllReferences();
     
+    public void saveAsBibTex(String filename);//Saves all references from the database into a file as bibtex. 
+    
     public String convertToBibtext(Map<String, String> reference);
     
     public Map<String, String> giveReference(String id);

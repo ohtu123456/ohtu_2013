@@ -79,6 +79,8 @@ public class UI {
                 logic.addFilter(selection.getArgument());
             } else if (selection.getName().equals("showfilters")) {
                 printFilters();
+            } else if (selection.getName().equals("save")) {
+                logic.saveAsBibTex(selection.getArgument());
             } else if (selection.getName().equals("print")) {
                 if (selection.HasArgument()) {
                     printDetailed(selection.getArgument());
@@ -150,21 +152,21 @@ public class UI {
     private void printAllReferences() {
         List<Map<String, String>> allReferences = logic.giveAllReferences();
         for (Map<String, String> ref : allReferences) {
-           String tulos= logic.convertToBibtext(ref);
+            String tulos = logic.convertToBibtext(ref);
             //       io.println("{ID: " + ref.get("id") + ", "
-     //               + " AUTHOR: " + ref.get("author") + ", "
-     //               + " TITLE: " + ref.get("title") + ", "
-     //               + " YEAR: " + ref.get("year") + "}.");
+            //               + " AUTHOR: " + ref.get("author") + ", "
+            //               + " TITLE: " + ref.get("title") + ", "
+            //               + " YEAR: " + ref.get("year") + "}.");
             io.println(tulos);
-           io.println("-------------------");
+            io.println("-------------------");
         }
         start();
     }
 
     private void printDetailed(String id) {
         Map<String, String> reference = logic.giveReference(id);
-        
-        String bib=logic.printBibTex(reference);
+
+        String bib = logic.printBibTex(reference);
         //for (String s : reference.keySet()) {
         //    io.println(s + " - " + reference.get(s));
         //}

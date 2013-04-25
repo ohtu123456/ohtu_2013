@@ -49,6 +49,10 @@ public class MenuHandler {
         Option showfilters = new Option("showfilters", "Show set filters.");
         Option clearfilters = new Option("clearfilters", "Clear all filters.");
         Option quit = new Option("quit", "Quit program.");
+        Option save = OptionBuilder.withArgName("filename")
+                .hasArg()
+                .withDescription("Save all references as a bibtex file.")
+                .create("save");
         Option print = OptionBuilder.withArgName("id")
                 .hasOptionalArg()
                 .withDescription("Print references, use specific id for detailed info.")
@@ -59,6 +63,7 @@ public class MenuHandler {
                 .create("filter");
         mainMenu.addOption(add);
         mainMenu.addOption(print);
+        mainMenu.addOption(save);
         mainMenu.addOption(showfilters);
         mainMenu.addOption(clearfilters);
         mainMenu.addOption(filter);
@@ -86,6 +91,9 @@ public class MenuHandler {
             userSelections.add(new Selection("add"));
             return userSelections;
         }
+        if (cmd.hasOption("save")) {
+            userSelections.add(new Selection("save", cmd.getOptionValue("save")));
+        }
         //Then commands that can be used together
         if (cmd.hasOption("clearfilters")) {
             userSelections.add(new Selection("clearfilters"));
@@ -105,8 +113,8 @@ public class MenuHandler {
             }
         }
         //Then reference types
-        for (String s : referenceTypes)   {
-            if (cmd.hasOption(s))   {
+        for (String s : referenceTypes) {
+            if (cmd.hasOption(s)) {
                 userSelections.add(new Selection(s));
             }
         }

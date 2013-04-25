@@ -14,7 +14,7 @@ book =  ["-add",
         "-quit"] as String[]
 
 //bookprint = "{ID: BA04,  AUTHOR: Beck, Kent and Andres, Cynthia,  TITLE: Extreme Programming Explained: Embrace Change (2nd Edition),  YEAR: 2004}"
-bookprint = "@book{BA04,author = {Beck, Kent and Andres, Cynthia},title = {Extreme Programming Explained: Embrace Change (2nd Edition)},year = {2004},publisher = {Addison-Wesley Professional}
+bookprint = "@book{BA04,author = {Beck, Kent and Andres, Cynthia},title = {Extreme Programming Explained: Embrace Change (2nd Edition)},year = {2004},publisher = {Addison-Wesley Professional}"
 inproceedings = ["-add",
                  "-inproceedings",
                  "Begel_2008",

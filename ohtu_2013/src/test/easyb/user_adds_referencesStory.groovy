@@ -13,8 +13,8 @@ book =  ["-add",
         "-print",
         "-quit"] as String[]
 
-bookprint = "{ID: BA04,  AUTHOR: Beck, Kent and Andres, Cynthia,  TITLE: Extreme Programming Explained: Embrace Change (2nd Edition),  YEAR: 2004}"
-
+#bookprint = "{ID: BA04,  AUTHOR: Beck, Kent and Andres, Cynthia,  TITLE: Extreme Programming Explained: Embrace Change (2nd Edition),  YEAR: 2004}"
+bookprint = "@book{BA04,author = {Beck, Kent and Andres, Cynthia},title = {Extreme Programming Explained: Embrace Change (2nd Edition)},year = {2004},publisher = {Addison-Wesley Professional}
 inproceedings = ["-add",
                  "-inproceedings",
                  "Begel_2008",
@@ -27,8 +27,8 @@ inproceedings = ["-add",
                  "-print",
                  "-quit"] as String[]
 
-inproceedingsprint = "{ID: Begel_2008,  AUTHOR: Begel, Andrew and Simon, Beth,  TITLE: Struggles of new college graduates in their first software development job,  YEAR: 2008}"
-
+#inproceedingsprint = "{ID: Begel_2008,  AUTHOR: Begel, Andrew and Simon, Beth,  TITLE: Struggles of new college graduates in their first software development job,  YEAR: 2008}"
+inproceedingsprint = "@inproceedings{Begel_2008,author = {Begel, Andrew and Simon, Beth},title = {Struggles of new college graduates in their first software development job},address = {},pages = {133},year = {2008},booktitle = {Proceedings of the SIGCSE '08},publisher = {ACM},}"
 
 article = ["-add",
            "-article",
@@ -45,8 +45,9 @@ article = ["-add",
            "-print",
            "-quit"] as String[]
 
-articleprint = "{ID: fox,  AUTHOR: Fox, Armando and Patterson, David,  TITLE: Crossing the software education chasm,  YEAR: 2012}"
-    
+#articleprint = "{ID: fox,  AUTHOR: Fox, Armando and Patterson, David,  TITLE: Crossing the software education chasm,  YEAR: 2012}"
+articleprint = "@article{fox,journal = {Communications of ACM},author = {Fox, Armando and Patterson, David},title = {Crossing the software education chasm},address = {New York, NY, USA},pages = {44-49},volume = {55},year = {2012},number = {5},publisher = {ACM},}" 
+
 scenario "user adds a new book reference",    {
     given "a new program instance", {        
         stubio = new StubIO(book)

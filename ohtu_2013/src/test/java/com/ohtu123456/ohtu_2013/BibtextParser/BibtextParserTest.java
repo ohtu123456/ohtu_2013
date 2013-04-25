@@ -46,11 +46,11 @@ public class BibtextParserTest extends TestCase {
     }
 
     public void testTulostaBibTex() {
-        String paluu = "@book{SOMEBOOK1,\n" +
-"author = {Maija Mallikas},\n" +
-"title = {Maijan opas matematiikkaan},\n" +
-"year = {2013},\n" +
-"publisher = {AlmaMedia},\n" +
+        String paluu = "@book{SOMEBOOK1," +
+"author = {Maija Mallikas}," +
+"title = {Maijan opas matematiikkaan}," +
+"year = {2013}," +
+"publisher = {AlmaMedia}," +
 "}";
 
         

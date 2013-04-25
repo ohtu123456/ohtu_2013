@@ -45,25 +45,39 @@ public class BibtextParserTest extends TestCase {
 
     }
 
-//    public void testTulostaBibTex() {
-//        String paluu = "@book{SOMEBOOK1," +
-//"author = {Maija Mallikas}," +
-//"title = {Maijan opas matematiikkaan}," +
-//"year = {2013}," +
-//"publisher = {AlmaMedia}," +
-//"}";
-//
-//        
-//      Map<String, String> reference = new HashMap();
-//        
-//        reference.put("id", "SOMEBOOK1");
-//        reference.put("author", "Maija Mallikas");
-//        reference.put("title", "Maijan opas matematiikkaan");
-//        reference.put("year", "2013");
-//        reference.put("publisher", "AlmaMedia");
-//
-//        assertEquals(paluu, bib.convertToBibtext(reference));
-//    }
+    public void testTulostaBibTex() {
+        String paluu ="@book{SOMEBOOK1,author = {Maija Mallikas},title = {Maijan opas matematiikkaan},year = {2013},publisher = {AlmaMedia},}";
+
+        
+      Map<String, String> reference = new HashMap();
+        
+        reference.put("id", "SOMEBOOK1");
+        reference.put("author", "Maija Mallikas");
+        reference.put("title", "Maijan opas matematiikkaan");
+        reference.put("year", "2013");
+        reference.put("publisher", "AlmaMedia");
+
+        assertEquals(paluu, bib.convertToBibtext(reference));
+    }
+    
+    public void testTulostaBibTex1() {
+        String paluu ="@book{SOMEBOOK1,\n" +
+"	author = {Maija Mallikas},\n" +
+"	title = {Maijan opas matematiikkaan},\n" +
+"	year = {2013},\n" +
+"	publisher = {AlmaMedia},\n" +
+"}";
+        
+      Map<String, String> reference = new HashMap();
+        
+        reference.put("id", "SOMEBOOK1");
+        reference.put("author", "Maija Mallikas");
+        reference.put("title", "Maijan opas matematiikkaan");
+        reference.put("year", "2013");
+        reference.put("publisher", "AlmaMedia");
+
+        assertEquals(paluu, bib.convertToBibtextPrintAll(reference));
+    }
 
     public void printClear() {
         String paluu ="Type = null\n" +

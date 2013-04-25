@@ -4,6 +4,7 @@ import com.ohtu123456.ohtu_2013.logic.LogicInterface;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class BibtextParser {
         this.logic = logic;
     }
 
-    public String getType(Map<String, String> reference) {
+    public  String getType(Map<String, String> reference) {
         String paluu = "";
 
         if (reference.size() == 5) {
@@ -47,7 +48,7 @@ public class BibtextParser {
 
     }
 
-    public String convertToBibtext(Map<String, String> reference) {
+    public  String convertToBibtext(Map<String, String> reference) {
 
         String paluu = "";
 
@@ -73,7 +74,7 @@ public class BibtextParser {
         return paluu;
     }
 
-    public String convertToBibtextPrintAll(Map<String, String> reference) {
+    public  String convertToBibtextPrintAll(Map<String, String> reference) {
 
         String paluu = "";
 
@@ -104,7 +105,7 @@ public class BibtextParser {
      * 
      */
 
-    public String korjaa_Aakkoset(String sana) {
+    public  String korjaa_Aakkoset(String sana) {
 
         sana = sana.replaceAll("ä", "{ä}");
         sana = sana.replaceAll("Ä", "{Ä}");
@@ -190,4 +191,5 @@ public class BibtextParser {
 
 
     }
+    
 }

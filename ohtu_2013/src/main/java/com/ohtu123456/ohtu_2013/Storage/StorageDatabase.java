@@ -36,6 +36,7 @@ public class StorageDatabase {
         server = EbeanServerFactory.create(config);
         newFilters = new ArrayList<String>();
         oldFilters = new ArrayList<String>();
+        filteredResults = null;
     }
 
     /**
@@ -51,6 +52,7 @@ public class StorageDatabase {
         server = EbeanServerFactory.create(config);
         newFilters = new ArrayList<String>();
         oldFilters = new ArrayList<String>();
+        filteredResults = null;
     }
 
     /**

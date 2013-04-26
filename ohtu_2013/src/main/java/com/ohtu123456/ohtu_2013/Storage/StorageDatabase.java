@@ -8,6 +8,7 @@ import com.avaje.ebean.config.ServerConfig;
 import com.avaje.ebean.config.dbplatform.SQLitePlatform;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.naming.directory.AttributeInUseException;
@@ -75,7 +76,7 @@ public class StorageDatabase {
      *
      * @param type Type of the reference
      * @param reference Reference data
-     * @throws Exception
+     * @throws Exception If id already in database
      */
     public void addReference(String type, Map<String, String> reference) throws AttributeInUseException {
         if (type.equals("article")) {
@@ -177,12 +178,12 @@ public class StorageDatabase {
 
     public void addFilter(String filter) {
         newFilters.add(filter);
-
     }
 
     public void clearFilters() {
         newFilters.clear();
         oldFilters.clear();
+        filteredResults = null;
     }
 
     public List<Map<String, String>> getFiltered() {
@@ -191,6 +192,14 @@ public class StorageDatabase {
         }
         applyNewFilters();
         return filteredResults;
+    }
+    
+    public Map<String, String> getId(String id){
+        for(Map<String, String> row: getReferences()){
+            if(row.get("id").equals(id))
+                return row;
+        }
+        return new HashMap<String, String>();
     }
 
     private void applyNewFilters() {

@@ -134,14 +134,10 @@ public class Logic implements LogicInterface {
      * @return the whole reference as a map, with an additional bibtex field added to it
      */
     public Map<String, String> giveReference(String id) {
-       // Map<String, String> reference = dbStorage.getReferences(id)
-        HashMap<String, String> testiReference = new HashMap<String, String>();
-        testiReference.put("id", "1255");
-        testiReference.put("author", "Not so good programmer");
-        testiReference.put("title", "Codesmell");
-        String asBibTex = parser.convertToBibtext(testiReference);
-        testiReference.put("bibtex", asBibTex);
-        return testiReference;
+        Map<String, String> reference = dbStorage.getId(id);
+        String asBibTex = parser.convertToBibtext(reference);
+        reference.put("bibtex", asBibTex);
+        return reference;
     }
 
     public void saveAsBibTex(String filename) {

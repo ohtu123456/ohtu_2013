@@ -160,12 +160,12 @@ public class UI {
     private void printDetailed(String id) {
         Map<String, String> reference = logic.giveReference(id);
 
-        String bib = logic.printBibTex(reference);
-        //for (String s : reference.keySet()) {
-        //    io.println(s + " - " + reference.get(s));
-        //}
-        //io.println("\nAs BibTex format: \n\n");
-        io.println(bib);
+        //String bib = logic.printBibTex(reference);
+        for (String s : reference.keySet()) {
+            io.println(s + " - " + reference.get(s));
+        }
+//        io.println("\nAs BibTex format: \n\n");
+//        io.println(bib);
     }
 
     private void printFilters() {

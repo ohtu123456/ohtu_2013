@@ -27,7 +27,7 @@ public class StorageDatabaseTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        testDatabasePath = "ohtu_2013/target/testDatabase";
+        testDatabasePath = "target/testDatabase";
         articleReference = new HashMap<String, String>();
         articleReference.put("id", "AUTH123");
         articleReference.put("author", "Matti Mallkias");
